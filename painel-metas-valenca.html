@@ -969,7 +969,7 @@ function setPanel(btn, panel, open){
 filtersToggle.addEventListener("click", () => { const open = headerFilters.hidden; setPanel(filtersToggle, headerFilters, open); if (open) setPanel(helpToggle, helpPanel, false); });
 helpToggle.addEventListener("click", () => { const open = helpPanel.hidden; setPanel(helpToggle, helpPanel, open); if (open) setPanel(filtersToggle, headerFilters, false); });
 
-let openNodes = new Set(["2", "2.3"]), openDetails = new Set(); /* abertos ao carregar */
+let openNodes = new Set(["2"]), openDetails = new Set(); /* abertos ao carregar */
 
 function metaRows(m, anc){
   const adv = advFor(m.id);
