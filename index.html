@@ -44,6 +44,18 @@
   #lastUpdated b{color:#fff;font-weight:600;}
 
   .header-filters{max-width:1400px;margin:14px auto 0;display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;border-top:1px solid rgba(255,255,255,.15);padding-top:14px;}
+  .hdr-toggle{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.3);color:#fff;padding:7px 14px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;}
+  .hdr-toggle:hover{background:rgba(255,255,255,.2);}
+  .hdr-toggle .ft-icon{display:inline-flex;width:18px;height:18px;align-items:center;justify-content:center;border:1.5px solid #fff;border-radius:5px;font-size:12px;font-weight:700;line-height:1;}
+  .hdr-toggle[aria-expanded="true"]{background:#fff;color:var(--navy);}
+  .hdr-toggle[aria-expanded="true"] .ft-icon{border-color:var(--navy);background:var(--navy);color:#fff;}
+  .hdr-links{display:inline-flex;gap:4px;}
+  .hdr-link{background:none;border:none;color:#c9d6e2;font:inherit;font-size:12px;text-decoration:underline;text-underline-offset:2px;text-decoration-color:rgba(201,214,226,.5);cursor:pointer;padding:4px 6px;}
+  .hdr-link:hover{color:#fff;}
+  .help-panel{max-width:1400px;margin:12px auto 0;border-top:1px solid rgba(255,255,255,.15);padding-top:12px;font-size:13.5px;line-height:1.55;color:#e7edf3;}
+  .help-panel[hidden]{display:none;}
+  .help-panel b{color:#fff;}
+  .help-panel ul{margin:6px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:4px;}
   .header-right{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-left:auto;}
   .header-filters{border-top:1px solid rgba(255,255,255,.15) !important;padding-top:14px !important;}
   .filters-bar{max-width:1400px;margin:14px auto 0;border-top:1px solid rgba(255,255,255,.15);padding-top:12px;}
@@ -349,8 +361,19 @@
     </div>
     <div class="header-right">
       <div id="lastUpdated">Atualizado em <b id="upd"></b></div>
-      <button type="button" id="filtersToggle" aria-expanded="false" aria-controls="headerFilters"><span class="ft-icon">+</span>Filtros<span id="filtersActive"></span></button>
+      <button type="button" id="filtersToggle" class="hdr-toggle" aria-expanded="false" aria-controls="headerFilters"><span class="ft-icon">+</span>Filtros<span id="filtersActive"></span></button>
+      <button type="button" id="helpToggle" class="hdr-toggle" aria-expanded="false" aria-controls="helpPanel"><span class="ft-icon">+</span>Como usar</button>
+      <span class="hdr-links"><button type="button" id="expandAllBtn" class="hdr-link">Expandir tudo</button><button type="button" id="collapseAllBtn" class="hdr-link">Recolher tudo</button></span>
     </div>
+  </div>
+  <div class="help-panel" id="helpPanel" hidden>
+    <b>Como usar</b>
+    <ul>
+      <li>Toque no <b>+</b> ao lado de cada item para ver os itens e as tarefas que estão dentro dele.</li>
+      <li>Toque no <b>+</b> ao lado de cada tarefa para ver o que precisa ser feito, por que é importante e o risco se atrasar.</li>
+      <li>As cores mostram a urgência: 🔴 vence em até 7 dias ou está atrasada; 🟡 vence em 8 a 15 dias; ⚪ no prazo; 🟢 cumprida.</li>
+      <li>No fim da página, a seção <b>Compilado da Situação</b> traz a explicação completa do caso.</li>
+    </ul>
   </div>
   <div class="header-filters" id="headerFilters" hidden>
     <div class="filter-field">
@@ -381,14 +404,6 @@
 
 <main>
   <div class="panel">
-    <div class="panel-header">
-      <div class="panel-header-top">
-        <div class="group-toggle-actions">
-          <button type="button" id="expandAllBtn" class="group-action-btn">Expandir tudo</button>
-          <button type="button" id="collapseAllBtn" class="group-action-btn">Recolher tudo</button>
-        </div>
-      </div>
-    </div>
     <div class="table-scroll">
       <table id="mainTable">
         <thead>
@@ -898,12 +913,14 @@ function passes(m){
 const anyFilter = () => fNode.value || fResp.value || fStatus.value || fBusca.value.trim();
 
 const filtersToggle = document.getElementById("filtersToggle"), headerFilters = document.getElementById("headerFilters");
-filtersToggle.addEventListener("click", () => {
-  const open = headerFilters.hidden;
-  headerFilters.hidden = !open;
-  filtersToggle.setAttribute("aria-expanded", open);
-  filtersToggle.querySelector(".ft-icon").textContent = open ? "−" : "+";
-});
+const helpToggle = document.getElementById("helpToggle"), helpPanel = document.getElementById("helpPanel");
+function setPanel(btn, panel, open){
+  panel.hidden = !open;
+  btn.setAttribute("aria-expanded", open);
+  btn.querySelector(".ft-icon").textContent = open ? "−" : "+";
+}
+filtersToggle.addEventListener("click", () => { const open = headerFilters.hidden; setPanel(filtersToggle, headerFilters, open); if (open) setPanel(helpToggle, helpPanel, false); });
+helpToggle.addEventListener("click", () => { const open = helpPanel.hidden; setPanel(helpToggle, helpPanel, open); if (open) setPanel(filtersToggle, headerFilters, false); });
 
 let openNodes = new Set(["2", "2.3"]), openDetails = new Set(); /* abertos ao carregar */
 
