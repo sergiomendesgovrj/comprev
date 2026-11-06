@@ -44,6 +44,8 @@
   #lastUpdated b{color:#fff;font-weight:600;}
 
   .header-filters{max-width:1400px;margin:14px auto 0;display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;border-top:1px solid rgba(255,255,255,.15);padding-top:14px;}
+  .header-right{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-left:auto;}
+  .header-filters{border-top:1px solid rgba(255,255,255,.15) !important;padding-top:14px !important;}
   .filters-bar{max-width:1400px;margin:14px auto 0;border-top:1px solid rgba(255,255,255,.15);padding-top:12px;}
   #filtersToggle{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.3);color:#fff;padding:7px 14px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;}
   #filtersToggle:hover{background:rgba(255,255,255,.2);}
@@ -217,7 +219,7 @@
   .tl .refs{font-size:11px;color:var(--muted);margin-top:2px;}
 
   .legend-bottom{margin:0;padding:12px 22px 14px;border-top:1px solid var(--panel-border);}
-  .panel-header{padding-bottom:12px;}
+  .panel-header{padding:8px 16px 4px;}
   .panel-header-top{align-items:center;}
   .panel-header h2{margin:0;}
   .group-toggle-actions{padding-top:0;gap:2px;margin-left:auto;}
@@ -343,12 +345,12 @@
   <div class="header-row">
     <div>
       <h1>PAINEL DE METAS · VALENÇA</h1>
-      <div class="h-sub">COMPREV, REGULARIDADE PREVIDENCIÁRIA E CAUC</div>
+      <div class="h-sub">CAUC e COMPREV</div>
     </div>
-    <div id="lastUpdated">Atualizado em <b id="upd"></b><br>Prazo final: <b>31/12/2026</b></div>
-  </div>
-  <div class="filters-bar">
-    <button type="button" id="filtersToggle" aria-expanded="false" aria-controls="headerFilters"><span class="ft-icon">+</span>Filtros<span id="filtersActive"></span></button>
+    <div class="header-right">
+      <div id="lastUpdated">Atualizado em <b id="upd"></b></div>
+      <button type="button" id="filtersToggle" aria-expanded="false" aria-controls="headerFilters"><span class="ft-icon">+</span>Filtros<span id="filtersActive"></span></button>
+    </div>
   </div>
   <div class="header-filters" id="headerFilters" hidden>
     <div class="filter-field">
@@ -381,7 +383,6 @@
   <div class="panel">
     <div class="panel-header">
       <div class="panel-header-top">
-        <div><h2>Metas CAUC e COMPREV</h2></div>
         <div class="group-toggle-actions">
           <button type="button" id="expandAllBtn" class="group-action-btn">Expandir tudo</button>
           <button type="button" id="collapseAllBtn" class="group-action-btn">Recolher tudo</button>
