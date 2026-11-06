@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel de Metas COMPREV e CAUC</title>
+<style>
+  :root{
+    --navy:#0f2438;
+    --navy-2:#16324a;
+    --ink:#1f2933;
+    --muted:#6b7785;
+    --line:#e3e8ec;
+    --bg:#f4f6f8;
+    --card:#ffffff;
+
+    --green:#1e8e5a; --green-bg:#e5f6ec; --green-line:#bfe5cf;
+    --amber:#d4a600; --amber-bg:#fdf6d8; --amber-line:#ecd680;
+    --red:#c22b3a;   --red-bg:#fbe6e8;   --red-line:#f0bcc2;
+    --gray:#8a94a0;  --gray-bg:#eef0f2;  --gray-line:#dde1e5;
+    --accent-blue:#2f7bda;
+
+    --panel-bg:#f1eefc;
+    --panel-bg-2:#e2d9f7;
+    --panel-border:#cdbdee;
+    --panel-ink:#3d2f66;
+    --panel-muted:#7566a3;
+    color-scheme:light;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;
+  }
+  button:focus-visible, select:focus-visible, input:focus-visible, a:focus-visible{outline:3px solid var(--accent-blue);outline-offset:2px;}
+
+  /* ---------- header ---------- */
+  header{background:linear-gradient(135deg,var(--navy),var(--navy-2));color:#fff;padding:18px 28px 16px;}
+  .header-row{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;max-width:1400px;margin:0 auto;flex-wrap:wrap;}
+  header h1{margin:0;font-size:20px;font-weight:600;letter-spacing:.2px;}
+  header .h-sub{margin-top:4px;font-size:12.5px;color:#c9d6e2;}
+  #lastUpdated{font-size:12px;color:#c9d6e2;text-align:right;line-height:1.5;}
+  #lastUpdated b{color:#fff;font-weight:600;}
+
+  .header-filters{max-width:1400px;margin:14px auto 0;display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;border-top:1px solid rgba(255,255,255,.15);padding-top:14px;}
+  .filters-bar{max-width:1400px;margin:14px auto 0;border-top:1px solid rgba(255,255,255,.15);padding-top:12px;}
+  #filtersToggle{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.3);color:#fff;padding:7px 14px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;}
+  #filtersToggle:hover{background:rgba(255,255,255,.2);}
+  #filtersToggle .ft-icon{display:inline-flex;width:18px;height:18px;align-items:center;justify-content:center;border:1.5px solid #fff;border-radius:5px;font-size:12px;font-weight:700;line-height:1;}
+  #filtersToggle[aria-expanded="true"]{background:#fff;color:var(--navy);}
+  #filtersToggle[aria-expanded="true"] .ft-icon{border-color:var(--navy);background:var(--navy);color:#fff;}
+  #filtersActive{font-size:11px;font-weight:700;background:var(--amber);color:#fff;border-radius:20px;padding:1px 7px;}
+  #filtersActive:empty{display:none;}
+  .header-filters[hidden]{display:none;}
+  .header-filters{margin-top:12px !important;border-top:none !important;padding-top:0 !important;}
+  .header-filters .filter-field{display:flex;flex-direction:column;gap:5px;min-width:150px;flex:1;}
+  .header-filters .filter-field label{font-size:10.5px;font-weight:600;color:#aebdcc;text-transform:uppercase;letter-spacing:.4px;}
+  .header-filters select, .header-filters input[type="text"]{
+    padding:7px 10px;border:1px solid rgba(255,255,255,.25);border-radius:6px;font-size:13px;
+    background:rgba(255,255,255,.94);color:var(--ink);width:100%;font-family:inherit;
+  }
+  .header-filters input[type="text"]::placeholder{color:#8a97a5;}
+  #resetFilters{border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.1);color:#fff;padding:8px 14px;border-radius:6px;font-size:12.5px;cursor:pointer;white-space:nowrap;font-family:inherit;}
+  #resetFilters:hover{background:rgba(255,255,255,.2);}
+
+  /* ---------- main ---------- */
+  main{max-width:1400px;margin:0 auto;padding:20px 28px 60px;}
+  @media (max-width:640px){header{padding:16px 16px 14px;} main{padding:16px 16px 48px;}}
+
+  /* ---------- painel de metas ---------- */
+  .panel{background:var(--panel-bg);border:1px solid var(--panel-border);border-top:4px solid var(--navy);border-radius:16px;overflow:hidden;box-shadow:0 2px 10px rgba(15,36,56,.06);}
+  .panel-header{padding:20px 22px 8px;}
+  .panel-header-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;}
+  .group-toggle-actions{display:flex;gap:6px;flex-shrink:0;padding-top:2px;}
+  .group-action-btn{font-size:11.5px;font-weight:600;color:var(--navy);background:#fff;border:1px solid rgba(15,36,56,.3);border-radius:6px;padding:5px 10px;cursor:pointer;white-space:nowrap;font-family:inherit;}
+  .group-action-btn:hover{background:#e9edf1;}
+  .panel-header h2{margin:0 0 4px;font-size:19px;font-weight:700;color:var(--navy);letter-spacing:.2px;}
+  .panel-header p{margin:0;font-size:12.5px;color:var(--panel-muted);}
+  .legend-inline{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:10px;font-size:11.5px;color:var(--panel-ink);}
+  .legend-inline span{display:inline-flex;align-items:center;gap:5px;}
+  .legend-inline i{width:9px;height:9px;border-radius:50%;display:inline-block;}
+
+  .table-scroll{overflow-x:auto;overflow-y:auto;max-height:75vh;-webkit-overflow-scrolling:touch;}
+  .table-scroll table{min-width:760px;}
+  table{width:100%;border-collapse:separate;border-spacing:0;font-size:13px;}
+  thead th{
+    position:sticky;top:0;z-index:15;background:var(--panel-bg);color:var(--panel-muted);
+    font-size:10.5px;text-transform:uppercase;letter-spacing:.6px;font-weight:700;
+    padding:14px 12px 10px;text-align:left;border-bottom:1px solid rgba(34,65,95,.12);white-space:nowrap;
+    box-shadow:0 1px 0 rgba(34,65,95,.12);
+  }
+  thead th.month-col{text-align:center;}
+  tbody td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.65);vertical-align:middle;color:var(--panel-ink);}
+
+  tr.group-row td{background:var(--panel-bg-2);font-weight:700;color:var(--panel-ink);padding:11px 12px;border-top:1px solid var(--panel-border);border-bottom:1px solid var(--panel-border);cursor:pointer;user-select:none;}
+  tr.group-row .grp-name{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  tr.group-row .grp-toggle{display:inline-flex;width:17px;height:17px;align-items:center;justify-content:center;border:1.5px solid var(--panel-ink);border-radius:5px;background:#fff;color:var(--panel-ink);font-size:12px;font-weight:700;line-height:1;flex-shrink:0;}
+  tr.group-row .grp-meta{font-size:11.5px;color:var(--panel-muted);font-weight:500;margin-left:4px;}
+  tr.group-row .grp-chip{display:inline-flex;align-items:center;justify-content:center;min-width:40px;padding:4px 8px;border-radius:7px;font-size:14px;font-weight:700;}
+
+  tr.meta-row td{font-size:12.8px;}
+  tr.meta-row:hover td{background:rgba(255,255,255,.45);}
+  tr.meta-row.hidden, tr.detail-row.hidden{display:none;}
+  .expand-btn{width:20px;height:20px;border:1.5px solid var(--panel-ink);background:#fff;border-radius:6px;color:var(--panel-ink);font-size:12px;font-weight:700;line-height:1;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-family:inherit;padding:0;}
+  .expand-btn:hover{background:#eef2f5;}
+  td.col-x{width:34px;padding-right:0;}
+  .col-resp{color:var(--panel-ink);font-weight:600;white-space:nowrap;}
+  .col-resp small{display:block;font-weight:500;color:var(--panel-muted);font-size:11px;}
+  .col-meta{max-width:420px;}
+  .meta-id{display:inline-block;font-size:10.5px;font-weight:700;padding:1px 6px;border-radius:20px;background:#fff;color:var(--navy);margin-right:6px;border:1px solid rgba(15,36,56,.18);}
+  .indicador-text{line-height:1.35;}
+  .entrega-text{display:block;color:var(--panel-muted);font-size:11.5px;margin-top:3px;line-height:1.35;}
+  .col-prazo{white-space:nowrap;font-variant-numeric:tabular-nums;}
+
+  td.month-cell{text-align:center;}
+  .chip{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;min-width:78px;padding:5px 8px;border-radius:8px;border:1px solid transparent;line-height:1.15;cursor:pointer;}
+  .chip .main{font-size:13.5px;font-weight:700;}
+  .chip .sub{font-size:10px;font-weight:500;opacity:.9;}
+  .chip.green{background:var(--green);border-color:var(--green);color:#fff;}
+  .chip.amber{background:var(--amber);border-color:var(--amber);color:#fff;}
+  .chip.red{background:var(--red);border-color:var(--red);color:#fff;}
+  .chip.gray{background:var(--gray-bg);border-color:var(--gray-line);color:var(--gray);}
+  .chip.na{cursor:default;}
+
+  tr.detail-row td{background:rgba(255,255,255,.55);padding:0;border-bottom:1px solid var(--panel-border);}
+  .detail-inner{padding:14px 18px 16px 46px;display:grid;grid-template-columns:1fr 1fr;gap:10px 26px;font-size:12.5px;}
+  .detail-inner .d-item{border-left:3px solid var(--panel-border);padding-left:10px;}
+  .detail-inner .d-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.4px;color:var(--panel-muted);font-weight:700;margin-bottom:3px;}
+  .detail-inner .d-value{color:var(--panel-ink);line-height:1.45;}
+  .detail-inner .full-span{grid-column:1 / -1;}
+  .detail-inner ul{margin:0;padding-left:16px;}
+  .empty-state{padding:50px 20px;text-align:center;color:var(--panel-muted);font-size:13.5px;}
+
+  /* balão de detalhe */
+  #tapPopover{display:none;position:fixed;z-index:200;max-width:280px;background:var(--navy);color:#fff;font-size:12.5px;line-height:1.4;padding:9px 12px;border-radius:8px;box-shadow:0 6px 20px rgba(15,36,56,.3);white-space:pre-line;}
+  #tapPopover.show{display:block;}
+
+  /* ---------- seções colapsáveis (padrão "+") ---------- */
+  .stats-section{margin-top:16px;}
+  .stats-toggle{display:inline-flex;align-items:center;gap:8px;background:#ffffff;border:1.5px solid rgba(15,36,56,.35);padding:8px 16px;border-radius:8px;font-size:13.5px;font-weight:700;color:var(--navy);cursor:pointer;box-shadow:0 1px 3px rgba(15,36,56,.06);font-family:inherit;}
+  .stats-toggle:hover{background:#eef2f5;border-color:rgba(15,36,56,.5);}
+  .stats-toggle .stats-toggle-icon{display:inline-flex;width:19px;height:19px;align-items:center;justify-content:center;border:1.5px solid var(--navy);border-radius:5px;color:var(--navy);font-size:13px;font-weight:700;line-height:1;flex-shrink:0;}
+  .stats-section.open .stats-toggle{background:var(--navy);color:#ffffff;border-color:var(--navy);}
+  .stats-section.open .stats-toggle .stats-toggle-icon{background:#ffffff;color:var(--navy);border-color:#ffffff;}
+  .stats-panel{display:none;margin-top:10px;background:#eef0f3;border:1px solid #dde1e6;border-radius:16px;overflow:hidden;box-shadow:0 2px 10px rgba(15,36,56,.05);}
+  .stats-section.open .stats-panel{display:block;}
+  .stats-panel-header{padding:18px 20px 6px;}
+  .stats-panel-header h2{margin:0 0 4px;font-size:17px;font-weight:700;color:var(--navy);letter-spacing:.2px;}
+  .stats-panel-header p{margin:0;font-size:12.5px;color:var(--muted);}
+  .sp-body{padding:10px 20px 20px;display:flex;flex-direction:column;gap:12px;font-size:13.5px;line-height:1.55;color:var(--ink);}
+  .sp-body p{margin:0;max-width:78ch;}
+
+  /* estatísticas */
+  .kpis{display:flex;flex-wrap:wrap;gap:10px;padding:14px 20px 20px;}
+  .kpi{background:#fff;border:1px solid #dde1e6;border-radius:12px;padding:16px 18px;flex:1 1 100%;}
+  .status-solo-top{display:flex;gap:32px;flex-wrap:wrap;margin-bottom:14px;}
+  .status-solo-stat .value{font-size:26px;font-weight:800;line-height:1;color:var(--navy);font-variant-numeric:tabular-nums;}
+  .status-solo-stat .label{font-size:12px;color:var(--muted);margin-top:6px;}
+  .status-kpi-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:9px;}
+  .status-kpi-title{font-size:12px;font-weight:700;color:var(--navy);}
+  .status-kpi-sub{font-size:11px;color:var(--muted);}
+  .status-bar{display:flex;width:100%;height:14px;border-radius:7px;overflow:hidden;background:var(--gray-bg);}
+  .status-bar-seg{height:100%;min-width:0;transition:width .4s ease;}
+  .status-bar-seg + .status-bar-seg{margin-left:2px;}
+  .status-bar-seg.green{background:var(--green);} .status-bar-seg.amber{background:var(--amber);} .status-bar-seg.red{background:var(--red);} .status-bar-seg.gray{background:#c9d0d7;}
+  .status-legend{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:10px;font-size:11.5px;color:var(--ink);}
+  .status-legend-item{display:flex;align-items:center;gap:5px;white-space:nowrap;}
+  .status-legend .dot{width:8px;height:8px;border-radius:50%;display:inline-block;}
+
+  .resp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;}
+  .resp-card{background:#fff;border:1px solid #dde1e6;border-left:4px solid var(--gray-line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:4px;font-size:12.5px;}
+  .resp-card.cc-red{border-left-color:var(--red);} .resp-card.cc-amber{border-left-color:var(--amber);} .resp-card.cc-green{border-left-color:var(--green);}
+  .resp-card b{font-size:14px;color:var(--navy);}
+  .resp-card .role{color:var(--muted);}
+  .resp-card .nums{display:flex;gap:10px;flex-wrap:wrap;font-weight:600;}
+
+  /* problema */
+  .facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;}
+  .fact{background:#fff;border:1px solid #dde1e6;border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:4px;}
+  .fact .big{font-size:24px;font-weight:800;color:var(--navy);font-variant-numeric:tabular-nums;}
+  .fact.bad .big{color:var(--red);}
+  .fact small{color:var(--muted);font-size:12px;line-height:1.4;}
+  .flow-title{font-weight:700;color:var(--navy);font-size:13px;}
+  .chain{display:flex;flex-wrap:wrap;align-items:stretch;gap:6px;}
+  .step{flex:1 1 140px;background:#fff;border:1px solid #dde1e6;border-radius:8px;padding:9px 11px;font-size:12.5px;display:flex;flex-direction:column;gap:2px;line-height:1.35;}
+  .step b{color:var(--navy);}
+  .step.bad{border-color:var(--red-line);background:var(--red-bg);} .step.bad b{color:var(--red);}
+  .step.good{border-color:var(--green-line);background:var(--green-bg);} .step.good b{color:var(--green);}
+  .arrow{align-self:center;color:var(--muted);font-weight:700;}
+  @media (max-width:560px){.chain{flex-direction:column}.arrow{transform:rotate(90deg)}}
+
+  /* CAUC */
+  .cauc{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;}
+  .citem{background:#fff;border:1px solid #dde1e6;border-top:4px solid var(--red);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:4px;font-size:12.5px;}
+  .citem .code{font-size:10.5px;font-weight:700;color:var(--red);letter-spacing:.4px;text-transform:uppercase;}
+  .citem b{color:var(--navy);font-size:13.5px;}
+  .citem p{color:var(--muted);}
+  .note{background:var(--amber-bg);border:1px solid var(--amber-line);color:#6b4a00;border-radius:8px;padding:10px 12px;font-size:12.5px;}
+
+  /* acordeão interno (glossário e frentes) */
+  details.plus{background:#fff;border:1px solid #dde1e6;border-radius:10px;}
+  details.plus > summary{list-style:none;cursor:pointer;display:flex;gap:10px;align-items:center;padding:11px 14px;font-weight:600;color:var(--navy);font-size:13.5px;}
+  details.plus > summary::-webkit-details-marker{display:none;}
+  details.plus .pm{display:inline-flex;width:19px;height:19px;align-items:center;justify-content:center;border:1.5px solid var(--navy);border-radius:5px;font-size:13px;font-weight:700;line-height:1;flex-shrink:0;}
+  details.plus[open] .pm{background:var(--navy);color:#fff;}
+  details.plus .acc-body{padding:0 14px 14px 43px;font-size:13px;line-height:1.55;display:flex;flex-direction:column;gap:8px;}
+  details.plus .acc-body .lbl{display:block;font-size:10.5px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);font-weight:700;}
+  @media (max-width:560px){details.plus .acc-body{padding-left:14px;}}
+  .acc-list{display:flex;flex-direction:column;gap:8px;}
+
+  /* histórico */
+  .timeline{display:flex;flex-direction:column;background:#fff;border:1px solid #dde1e6;border-radius:10px;padding:4px 14px;}
+  .tl{display:grid;grid-template-columns:62px 1fr;gap:12px;padding:11px 0;border-bottom:1px solid var(--line);font-size:12.8px;line-height:1.45;}
+  .tl:last-child{border-bottom:none;}
+  .tl .d{font-weight:700;color:var(--navy);font-variant-numeric:tabular-nums;}
+  .tl .refs{font-size:11px;color:var(--muted);margin-top:2px;}
+
+  .legend-bottom{margin:0;padding:12px 22px 14px;border-top:1px solid var(--panel-border);}
+  .panel-header{padding-bottom:12px;}
+  .panel-header-top{align-items:center;}
+  .panel-header h2{margin:0;}
+  .group-toggle-actions{padding-top:0;gap:2px;margin-left:auto;}
+  .group-action-btn{background:transparent;border:none;color:var(--panel-muted);font-size:11px;font-weight:500;padding:4px 6px;text-decoration:underline;text-underline-offset:2px;text-decoration-color:rgba(117,102,163,.4);}
+  .group-action-btn:hover{background:transparent;color:var(--navy);}
+  #expandAllBtn, #collapseAllBtn{color:var(--panel-muted);}
+  #expandAllBtn:hover, #collapseAllBtn:hover{background:transparent;color:var(--navy);}
+  /* cabeçalho da tabela fixo ao rolar a página */
+  .panel{overflow:visible;}
+  .table-scroll{overflow:visible !important;max-height:none !important;}
+  .table-scroll table{min-width:0 !important;}
+  @media (max-width:640px){
+    .col-prazo{display:none;}
+    .col-resp small{display:none;}
+    .col-resp{white-space:normal;font-size:12px !important;}
+    tbody td, thead th{padding-left:6px;padding-right:6px;}
+    td.col-x{width:28px;}
+    .chip{min-width:54px;padding:4px 5px;}
+    .chip .sub{font-size:9.5px;}
+    .col-meta{font-size:12.3px;}
+    .entrega-text{display:none;}
+    tr.group-row .grp-why{display:none;}
+    thead th{font-size:9.5px;letter-spacing:.3px;}
+  }
+
+  /* infográfico */
+  .info{background:#fff;border:1px solid #dde1e6;border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px;}
+  .info-title{font-size:12px;font-weight:800;letter-spacing:.8px;color:var(--navy);}
+  .info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+  @media (max-width:820px){.info-grid{grid-template-columns:1fr;}}
+  .ic{border:1px solid var(--red-line);border-top:4px solid var(--red);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px;background:#fffafa;}
+  .ic-top{display:flex;justify-content:space-between;align-items:center;gap:8px;}
+  .ic-item{font-size:10.5px;font-weight:800;letter-spacing:.6px;color:var(--red);}
+  .ic-st{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:20px;color:#fff;}
+  .st-amber{background:var(--amber);} .st-red{background:var(--red);} .st-green{background:var(--green);}
+  .ic-name{font-size:16px;font-weight:800;color:var(--navy);}
+  .ic-causes{margin:0;padding-left:18px;font-size:12.5px;line-height:1.45;display:flex;flex-direction:column;gap:4px;}
+  .ic-way{font-size:12.5px;line-height:1.4;background:var(--green-bg);border-radius:8px;padding:8px 10px;color:#14583a;}
+  .ic-way span{display:block;font-size:10px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--green);}
+  .ic-resp{font-size:11.5px;color:var(--muted);}
+  .ic-resp::before{content:"Responsável: ";font-weight:700;color:var(--navy);}
+  .info-down{display:flex;justify-content:center;}
+  .info-down span{width:0;height:0;border-left:14px solid transparent;border-right:14px solid transparent;border-top:14px solid #b8c1ca;}
+  .info-result{border-radius:12px;padding:14px 16px;text-align:center;display:flex;flex-direction:column;gap:6px;align-items:center;}
+  .info-result.bad{background:var(--red);color:#fff;}
+  .info-result.good{background:var(--green);color:#fff;}
+  .ir-title{font-size:17px;font-weight:800;letter-spacing:1px;}
+  .ir-sub{font-size:12.5px;opacity:.92;}
+  .ir-pills{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;}
+  .ir-pills span{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.4);border-radius:20px;padding:4px 10px;font-size:12px;font-weight:600;}
+  .cp-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+  @media (max-width:820px){.cp-steps{grid-template-columns:1fr;}}
+  .cp{position:relative;border:1px solid #dde1e6;border-radius:10px;padding:12px 12px 12px 48px;font-size:12.5px;line-height:1.4;display:flex;flex-direction:column;gap:2px;background:var(--bg);}
+  .cp b{color:var(--navy);font-size:13.5px;}
+  .cp.good{background:var(--green-bg);border-color:var(--green-line);}
+  .cp.good b{color:var(--green);}
+  .cp-n{position:absolute;left:12px;top:12px;width:26px;height:26px;border-radius:50%;background:var(--navy);color:#fff;font-weight:800;font-size:13px;display:grid;place-items:center;}
+  .cp.good .cp-n{background:var(--green);}
+
+  .doc .acc-body p{max-width:78ch;}
+  .doc .acc-body{font-size:13.5px;}
+  .obj{display:flex;gap:12px;align-items:flex-start;background:var(--bg);border-radius:10px;padding:12px;}
+  .obj b{color:var(--navy);font-size:14px;}
+  .obj p{margin:6px 0 0;}
+  .obj-n{flex:0 0 28px;height:28px;border-radius:50%;background:var(--navy);color:#fff;font-weight:800;display:grid;place-items:center;font-size:13px;}
+  .actors, .steps{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;}
+  .doc-table{border-collapse:collapse;width:100%;max-width:440px;font-size:13px;}
+  .doc-table td{padding:7px 10px;border-bottom:1px solid var(--line);}
+  .doc-table td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
+  .doc-table tr.tot td{font-weight:800;color:var(--navy);border-bottom:none;border-top:2px solid var(--navy);}
+  .doc .timeline{padding:4px 12px;}
+  .doc .tl{grid-template-columns:70px 1fr;}
+  footer{text-align:center;color:var(--muted);font-size:11.5px;padding:24px 0 0;line-height:1.6;}
+  @media (max-width:980px){.detail-inner{grid-template-columns:1fr;padding-left:18px;}}
+  @media (prefers-reduced-motion:reduce){.status-bar-seg{transition:none;}}
+</style>
+</head>
+<body>
+<div id="tapPopover" role="status"></div>
+
+<header>
+  <div class="header-row">
+    <div>
+      <h1>PAINEL DE METAS · VALENÇA</h1>
+      <div class="h-sub">COMPREV, REGULARIDADE PREVIDENCIÁRIA E CAUC</div>
+    </div>
+    <div id="lastUpdated">Atualizado em <b>06/11/2026</b><br>Prazo final: <b>31/12/2026</b></div>
+  </div>
+  <div class="filters-bar">
+    <button type="button" id="filtersToggle" aria-expanded="false" aria-controls="headerFilters"><span class="ft-icon">+</span>Filtros<span id="filtersActive"></span></button>
+  </div>
+  <div class="header-filters" id="headerFilters" hidden>
+    <div class="filter-field">
+      <label for="fFrente">Frente</label>
+      <select id="fFrente"><option value="">Todas</option></select>
+    </div>
+    <div class="filter-field">
+      <label for="fResp">Responsável</label>
+      <select id="fResp"><option value="">Todos</option></select>
+    </div>
+    <div class="filter-field">
+      <label for="fStatus">Semáforo</label>
+      <select id="fStatus">
+        <option value="">Todos</option>
+        <option value="red">Atrasadas</option>
+        <option value="amber">Risco de atraso</option>
+        <option value="gray">No prazo, em aberto</option>
+        <option value="green">Cumpridas</option>
+      </select>
+    </div>
+    <div class="filter-field">
+      <label for="fBusca">Buscar</label>
+      <input type="text" id="fBusca" placeholder="Meta, entrega ou palavra-chave…" autocomplete="off">
+    </div>
+    <button type="button" id="resetFilters">Limpar filtros</button>
+  </div>
+</header>
+
+<main>
+  <!-- ================= METAS ================= -->
+  <div class="panel">
+    <div class="panel-header">
+      <div class="panel-header-top">
+        <div>
+          <h2>Metas CAUC e COMPREV</h2>
+        </div>
+        <div class="group-toggle-actions">
+          <button type="button" id="expandAllBtn" class="group-action-btn">Expandir tudo</button>
+          <button type="button" id="collapseAllBtn" class="group-action-btn">Recolher tudo</button>
+        </div>
+      </div>
+    </div>
+    <div class="table-scroll">
+      <table id="mainTable">
+        <thead>
+          <tr>
+            <th class="col-x"></th>
+            <th>Responsável</th>
+            <th>Meta e entrega</th>
+            <th class="col-prazo">Prazo</th>
+            <th class="month-col">Novembro</th>
+            <th class="month-col">Dezembro</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+    <div class="legend-inline legend-bottom">
+      <span><i style="background:var(--green)"></i>cumprida</span>
+      <span><i style="background:var(--amber)"></i>risco de atraso (vence em até 7 dias)</span>
+      <span><i style="background:var(--red)"></i>atrasada</span>
+      <span><i style="background:#c9d0d7"></i>no prazo, em aberto</span>
+    </div>
+  </div>
+
+  <!-- ================= RESUMO DA SITUAÇÃO ================= -->
+  <div class="stats-section" id="sec-resumo">
+    <button type="button" class="stats-toggle" aria-expanded="false"><span class="stats-toggle-icon">+</span>RESUMO DA SITUAÇÃO</button>
+    <div class="stats-panel">
+      <div class="stats-panel-header"><h2>RESUMO DA SITUAÇÃO</h2></div>
+      <div class="sp-body">
+        <div class="facts">
+          <div class="fact"><span class="big">R$ 25,5 mi</span><span>a receber do COMPREV</span><small>R$ 24.992.769,63 de atrasados acumulados + R$ 537.728,84 de fluxo mensal (sistema COMPREV, 19/10/2026).</small></div>
+          <div class="fact bad"><span class="big">3 pendências</span><span>no CAUC em 05/11/2026</span><small>Todos os demais itens do CAUC estão comprovados.</small></div>
+        </div>
+
+        <div class="info">
+          <div class="info-title">O QUE TRAVA O CAUC</div>
+          <div class="info-grid">
+            <div class="ic">
+              <div class="ic-top"><span class="ic-item">ITEM 4.2</span><span class="ic-st st-amber">em andamento</span></div>
+              <div class="ic-name">Previdência sem CRP</div>
+              <ol class="ic-causes">
+                <li>Termos de parcelamento <b>0875</b> (erro de data) e <b>1219</b> (em análise) deixam o DIPR divergente</li>
+                <li>Convênio de previdência complementar com a <b>RJPrev</b> aguarda assinatura e aprovação da Previc</li>
+              </ol>
+              <div class="ic-way"><span>Saída</span>CRP emergencial (pedido pronto, falta assinatura do prefeito) e correção dos termos</div>
+              <div class="ic-resp">Juarez</div>
+            </div>
+            <div class="ic">
+              <div class="ic-top"><span class="ic-item">ITEM 1.2</span><span class="ic-st st-amber">na Justiça</span></div>
+              <div class="ic-name">Precatórios</div>
+              <ol class="ic-causes">
+                <li>Restrição registrada em <b>2024</b> no regime especial do TJRJ</li>
+                <li>O TJRJ já pediu <b>duas vezes</b> ao Tesouro a retirada, sem resultado</li>
+                <li>Ação cautelar na Justiça Federal: liminar salvou recurso de emenda; <b>mérito pendente</b></li>
+              </ol>
+              <div class="ic-way"><span>Saída</span>Decisão de mérito ou baixa administrativa pelo Tesouro</div>
+              <div class="ic-resp">Pedro</div>
+            </div>
+            <div class="ic">
+              <div class="ic-top"><span class="ic-item">ITEM 1.5</span><span class="ic-st st-red">não iniciado</span></div>
+              <div class="ic-name">CADIN</div>
+              <ol class="ic-causes">
+                <li>Débitos com o <b>Conselho Regional de Farmácia do RJ</b></li>
+                <li>Notificações nº 3359 e nº 3698, de 27/07/2026</li>
+              </ol>
+              <div class="ic-way"><span>Saída</span>Quitar ou parcelar e pedir a baixa ao Conselho</div>
+              <div class="ic-resp">Rafael</div>
+            </div>
+          </div>
+          <div class="info-down" aria-hidden="true"><span></span></div>
+          <div class="info-result bad">
+            <div class="ir-title">CAUC IRREGULAR</div>
+            <div class="ir-sub">Enquanto houver uma pendência, Valença não pode:</div>
+            <div class="ir-pills"><span>Firmar convênios com a União</span><span>Receber transferências voluntárias</span><span>Contratar empréstimos em bancos federais</span></div>
+          </div>
+          <div class="info-down" aria-hidden="true"><span></span></div>
+          <div class="info-result good">
+            <div class="ir-title">CAUC LIBERADO</div>
+            <div class="ir-sub">Só quando as três pendências estiverem resolvidas ao mesmo tempo.</div>
+          </div>
+        </div>
+
+        <div class="info">
+          <div class="info-title">EM PARALELO: OS R$ 25,5 MILHÕES DO COMPREV</div>
+          <div class="cp-steps">
+            <div class="cp"><span class="cp-n">1</span><b>Requerimentos com exigência</b>O INSS pediu documentos ou correções. Parados, não entram na fila e podem ser indeferidos.</div>
+            <div class="cp"><span class="cp-n">2</span><b>Exigências respondidas</b>O pedido entra na fila de análise do INSS.</div>
+            <div class="cp good"><span class="cp-n">3</span><b>Dinheiro para o PREVI</b>Pagamento dos atrasados (R$ 24,99 mi, em parcelas) e fluxo mensal novo.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= COMPILADO ================= -->
+  <div class="stats-section" id="sec-compilado">
+    <button type="button" class="stats-toggle" aria-expanded="false"><span class="stats-toggle-icon">+</span>COMPILADO DA SITUAÇÃO</button>
+    <div class="stats-panel">
+      <div class="stats-panel-header"><h2>COMPILADO DA SITUAÇÃO</h2><p>Exposição completa do caso, dos objetivos aos próximos passos. Cada capítulo abre no +.</p></div>
+      <div class="sp-body doc">
+
+        <details class="plus"><summary><span class="pm">+</span>1. Objetivos do grupo de trabalho e seus motivos</summary>
+        <div class="acc-body">
+          <p>O grupo de trabalho foi constituído para resolver, até 31 de dezembro de 2026, um conjunto de pendências previdenciárias e fiscais que hoje limitam a capacidade financeira do Município de Valença. São quatro os objetivos, cada um com sua justificativa.</p>
+          <div class="obj">
+            <div class="obj-n">1</div>
+            <div><b>Recuperar os créditos da compensação previdenciária (COMPREV)</b>
+            <p><span class="lbl">Motivo</span>O Município tem cerca de R$ 25,5 milhões a receber do INSS, valor que pertence ao regime de previdência dos servidores e que reduz a necessidade de a Prefeitura cobrir o déficit do PREVI com recursos do Tesouro municipal. Além do valor acumulado, há processos parados por falta de resposta a exigências do INSS, o que representa dinheiro adicional ainda não contabilizado.</p></div>
+          </div>
+          <div class="obj">
+            <div class="obj-n">2</div>
+            <div><b>Restabelecer o Certificado de Regularidade Previdenciária (CRP)</b>
+            <p><span class="lbl">Motivo</span>Sem o CRP, a lei federal impede o Município de receber transferências voluntárias da União, de celebrar convênios e de contratar empréstimos com instituições financeiras federais. O CRP é, portanto, condição para o acesso a recursos federais.</p></div>
+          </div>
+          <div class="obj">
+            <div class="obj-n">3</div>
+            <div><b>Sanear integralmente o CAUC</b>
+            <p><span class="lbl">Motivo</span>O CAUC é o cadastro do Tesouro Nacional que reúne todas as exigências para que um município receba recursos voluntários da União. Valença apresenta três pendências (precatórios, CADIN e regularidade previdenciária). Enquanto houver uma única pendência, convênios e emendas parlamentares que dependem de convênio ficam bloqueados.</p></div>
+          </div>
+          <div class="obj">
+            <div class="obj-n">4</div>
+            <div><b>Organizar as obrigações do Município com o PREVI e a governança do tema</b>
+            <p><span class="lbl">Motivo</span>Erros recentes, como o projeto de lei enviado à Câmara com objeto incorreto, demonstraram a necessidade de centralizar as decisões previdenciárias, conhecer com exatidão os valores devidos e criar rotinas permanentes, de modo que o problema não se repita após a solução atual.</p></div>
+          </div>
+        </div></details>
+
+        <details class="plus"><summary><span class="pm">+</span>2. Conceitos básicos para compreender o caso</summary>
+        <div class="acc-body">
+          <p>Para acompanhar a situação, é necessário distinguir duas previdências. O <b>INSS</b>, chamado de Regime Geral, atende os trabalhadores da iniciativa privada. O <b>PREVI Valença</b> é o Regime Próprio de Previdência Social (RPPS) do Município: paga as aposentadorias e pensões dos servidores concursados. Quando os recursos do PREVI são insuficientes, a Prefeitura é obrigada a complementá-los.</p>
+          <p>O PREVI é fiscalizado pelo <b>Ministério da Previdência Social</b>, que verifica periodicamente se o regime cumpre as normas federais. Quando cumpre, o Ministério emite o <b>CRP</b>. As informações dessa fiscalização ficam no sistema <b>CADPREV</b>, alimentado pelo próprio Município por meio de demonstrativos, entre eles o <b>DIPR</b>, que informa as contribuições, os aportes e as parcelas pagas ao PREVI.</p>
+          <p>Paralelamente, o <b>Tesouro Nacional</b> mantém o <b>CAUC</b>, que consolida a situação do Município em relação a diversas exigências: tributos federais, FGTS, relatórios fiscais, pagamento de precatórios, dívidas com órgãos federais (CADIN) e regularidade previdenciária (CRP), entre outras. O CAUC funciona como um semáforo: qualquer item pendente impede o recebimento de transferências voluntárias.</p>
+          <p>Por fim, a <b>compensação previdenciária (COMPREV)</b> é o acerto de contas entre o INSS e o PREVI. Quando um servidor que contribuiu para o INSS antes do concurso se aposenta pelo PREVI, o Município paga o benefício integral, mas tem direito a ser ressarcido pelo INSS na proporção do tempo contribuído ao Regime Geral (Lei nº 9.796/1999).</p>
+        </div></details>
+
+        <details class="plus"><summary><span class="pm">+</span>3. Os atores envolvidos</summary>
+        <div class="acc-body">
+          <ul class="actors">
+            <li><b>Prefeitura Municipal de Valença.</b> Representada pelo Prefeito, que assina como representante legal do ente. A Secretaria de Fazenda, sob a titular Denise, coordena o grupo de trabalho e responde pela contabilidade e pela ordenação de despesas.</li>
+            <li><b>PREVI Valença.</b> Instituto de previdência dos servidores. Juarez é o representante do RPPS e opera os sistemas COMPREV e CADPREV.</li>
+            <li><b>Procuradoria do Município.</b> Pedro, procurador, conduz as questões de precatórios. Leonardo responde pela redação de projetos de lei.</li>
+            <li><b>Atuário.</b> Profissional que calcula o déficit do PREVI e os aportes necessários.</li>
+            <li><b>Câmara Municipal.</b> Aprova as leis de parcelamento e de aportes. Dudu acompanha a tramitação.</li>
+            <li><b>Ministério da Previdência Social.</b> Emite o CRP, analisa os acordos de parcelamento e opera o COMPREV em conjunto com o INSS.</li>
+            <li><b>INSS.</b> Analisa os requerimentos de compensação e paga os valores ao PREVI.</li>
+            <li><b>Tesouro Nacional.</b> Mantém o CAUC e o registro da restrição de precatórios.</li>
+            <li><b>Tribunal de Justiça do Estado do Rio de Janeiro (TJRJ).</b> Administra o regime especial de precatórios do Município.</li>
+            <li><b>Justiça Federal.</b> Processa a ação cautelar do Município contra a restrição de precatórios.</li>
+            <li><b>RJPrev e Previc.</b> A RJPrev é a entidade que administrará a previdência complementar dos servidores; a Previc é o órgão federal que aprova o convênio de adesão.</li>
+            <li><b>Conselho Regional de Farmácia do RJ.</b> Credor dos débitos que levaram o Município ao CADIN.</li>
+          </ul>
+        </div></details>
+
+        <details class="plus"><summary><span class="pm">+</span>4. Cronologia dos fatos</summary>
+        <div class="acc-body">
+          <div class="timeline">
+            <div class="tl"><span class="d">25/03/24</span><div>Registro da restrição de precatórios do Município no regime especial do TJRJ, que passa a constar no CAUC.</div></div>
+            <div class="tl"><span class="d">31/12/25</span><div>A Procuradoria ajuíza ação cautelar na Justiça Federal para preservar o recurso de uma emenda parlamentar e pede a exclusão da restrição. A liminar preserva o recurso; o pedido de exclusão ainda aguarda julgamento de mérito.</div></div>
+            <div class="tl"><span class="d">27/07/26</span><div>Conselho Regional de Farmácia do RJ registra o Município no CADIN (notificações nº 3359 e nº 3698).</div></div>
+            <div class="tl"><span class="d">23/09/26</span><div>A Prefeitura envia à Câmara a Mensagem nº 100/2026, com pedido de urgência, propondo o parcelamento de contribuições patronais de setembro a dezembro de 2025.</div></div>
+            <div class="tl"><span class="d">15/10/26</span><div>Informação inicial de que o Município teria cerca de R$ 24 milhões a receber do COMPREV e muitos requerimentos com exigências pendentes.</div></div>
+            <div class="tl"><span class="d">19/10/26</span><div>Levantamento no sistema COMPREV aponta R$ 25.530.499,47 a receber. Identifica-se que a Mensagem nº 100/2026 tem objeto incorreto: o débito não é de contribuição patronal, mas de aporte não repassado. A tramitação é suspensa e o grupo estabelece que nenhuma lei previdenciária seguirá à Câmara sem sua revisão. São apontados dois termos de parcelamento pendentes no Ministério.</div></div>
+            <div class="tl"><span class="d">05/11/26</span><div>Extrato do CAUC confirma três pendências. A Secretaria de Fazenda designa os responsáveis. O pedido de CRP emergencial é preparado e a documentação da RJPrev é recebida, ambos aguardando assinatura do Prefeito. A Procuradoria relata o andamento judicial dos precatórios.</div></div>
+            <div class="tl"><span class="d">06/11/26</span><div>Informa-se que a adesão à RJPrev não tem custo e conta com pareceres favoráveis do TCE e da PGE. Surge a sugestão de incluir os cargos eletivos no plano, sem contribuição patronal.</div></div>
+          </div>
+        </div></details>
+
+        <details class="plus"><summary><span class="pm">+</span>5. Compensação previdenciária (COMPREV): o crédito a recuperar</summary>
+        <div class="acc-body">
+          <p><span class="lbl">Como funciona</span>Cada aposentadoria ou pensão do PREVI em que o servidor tenha tempo de contribuição ao INSS gera um requerimento no sistema COMPREV. O INSS analisa o pedido e, se o aprovar, passa a pagar ao PREVI uma parcela mensal proporcional, além dos valores atrasados desde a concessão do benefício.</p>
+          <p><span class="lbl">Valores levantados em 19/10/2026</span></p>
+          <table class="doc-table"><tbody>
+            <tr><td>Fluxo acumulado (atrasados)</td><td class="n">R$ 24.992.769,63</td></tr>
+            <tr><td>Fluxo mensal</td><td class="n">R$ 537.728,84</td></tr>
+            <tr><td>Estoque (benefícios anteriores a 1999)</td><td class="n">R$ 0,00</td></tr>
+            <tr class="tot"><td>Total</td><td class="n">R$ 25.530.499,47</td></tr>
+          </tbody></table>
+          <p><span class="lbl">O que ainda não se sabe</span>Primeiro, se o fluxo mensal de aproximadamente R$ 537 mil já está sendo recebido. Em caso positivo, ele não representa receita nova. Segundo, em que ritmo o INSS pagará os atrasados, já que não costuma fazê-lo de uma só vez. Terceiro, quantos requerimentos estão parados com exigências e quanto valem. Esse último valor provavelmente não está incluído nos R$ 25,5 milhões.</p>
+          <p><span class="lbl">Por que há dinheiro parado</span>Quando o INSS identifica falta de documento ou divergência de dados, devolve o requerimento com uma exigência. Enquanto o Município não responde, o processo não entra na fila de análise. Se permanecer muito tempo sem resposta, pode ser indeferido.</p>
+          <p><span class="lbl">Restrição de uso</span>Os recursos da compensação somente podem ser aplicados no pagamento de benefícios previdenciários. Não podem custear outras despesas da Prefeitura, mas reduzem a necessidade de complementação do PREVI pelo Tesouro municipal.</p>
+          <p><span class="lbl">Objetivo estrutural</span>Criar uma rotina permanente de recuperação, com equipe designada e relatório mensal, para que os créditos sejam requeridos e acompanhados continuamente e deixem de se acumular.</p>
+        </div></details>
+
+        <details class="plus"><summary><span class="pm">+</span>6. Aportes, parcelamentos e o projeto de lei</summary>
+        <div class="acc-body">
+          <p><span class="lbl">Déficit atuarial e aporte</span>O cálculo atuarial projeta quanto o PREVI precisará para pagar todos os benefícios futuros. A diferença entre essa necessidade e os recursos existentes é o déficit atuarial. Para cobri-lo, a lei municipal fixa aportes periódicos da Prefeitura ao PREVI. O aporte não se confunde com a contribuição patronal mensal: é um valor adicional, destinado a equilibrar o regime ao longo dos anos.</p>
+          <p><span class="lbl">Situação informada</span>Segundo o PREVI, as contribuições correntes, patronais e dos servidores, estão em dia. O débito existente refere-se a aportes das competências de setembro a dezembro de 2025, não repassados, que a atual gestão pretende parcelar. A lei correspondente pode ser aprovada até o fim de dezembro.</p>
+          <p><span class="lbl">O problema da Mensagem nº 100/2026</span>O projeto enviado à Câmara tratava de contribuições patronais, e não de aportes. A divergência não é apenas de redação: altera o objeto, a fundamentação e o enquadramento do débito. Por isso, a solução adequada é a retirada ou a substituição do projeto, com valores e competências validados pelo atuário, e não uma simples correção.</p>
+          <p><span class="lbl">Os termos de parcelamento</span>Há dois acordos de parcelamento com problema no Ministério. O <b>termo 0875</b> contém erro de data. O <b>termo 1219</b> aguarda análise. Como os valores desses termos não coincidem com o que o Município informa no DIPR, o sistema aponta irregularidade, e essa é uma das causas da perda do CRP.</p>
+          <p><span class="lbl">Assinaturas</span>Os termos de parcelamento exigem três assinaturas: a do Prefeito, como representante do ente; a do Juarez, como representante do RPPS; e a da Denise, como ordenadora de despesa. A substituição do Prefeito exigiria alteração cadastral aprovada pelo Ministério, o que demandaria tempo.</p>
+        </div></details>
+
+        <details class="plus"><summary><span class="pm">+</span>7. A perda do CRP e a solução emergencial</summary>
+        <div class="acc-body">
+          <p><span class="lbl">Por que o CRP não está vigente</span>O extrato aponta duas causas. A primeira é a inconsistência do DIPR, decorrente dos termos 0875 e 1219. A segunda é a pendência na adesão ao regime de previdência complementar.</p>
+          <p><span class="lbl">Consequências</span>Sem CRP, a lei federal impõe ao Município a suspensão das transferências voluntárias da União, o impedimento de celebrar convênios e a suspensão de empréstimos por instituições financeiras federais. O item 4.2 do CAUC permanece pendente.</p>
+          <p><span class="lbl">Solução de curto prazo</span>O PREVI preparou pedido de <b>CRP emergencial</b>, com fundamento no art. 249 da Portaria MTP nº 1.467/2022, sob o argumento de que as falhas do DIPR não são de responsabilidade do regime. O pedido exige as assinaturas do Prefeito e do Juarez e será enviado pelo Gescon, canal oficial do Ministério. O certificado emergencial tem validade de até seis meses e só é prorrogado mediante comprovação de que as causas estão sendo sanadas. Trata-se do segundo pedido dessa natureza, o que indica que a causa de fundo ainda não foi resolvida.</p>
+          <p><span class="lbl">Solução definitiva</span>Corrigir os termos de parcelamento no CADPREV, manter o DIPR consistente a cada envio e concluir a adesão à previdência complementar. Somente assim o CRP passa a ser emitido regularmente, sem depender de medidas excepcionais.</p>
+          <p><span class="lbl">Previdência complementar</span>Desde a Emenda Constitucional nº 103/2019, todo ente com regime próprio deve oferecer previdência complementar aos servidores cuja remuneração supere o teto do INSS. Valença aderirá ao plano da RJPrev, que já atende cerca de 40 municípios. A adesão não tem custo e conta com pareceres favoráveis do TCE e da PGE. Após a assinatura, a RJPrev encaminha o convênio à Previc, cuja aprovação não é imediata. A sugestão de incluir os cargos eletivos no plano, sem contribuição patronal, é decisão política distinta: não é exigida para o CRP, pode depender de lei municipal e não deve atrasar o envio do convênio.</p>
+        </div></details>
+
+        <details class="plus"><summary><span class="pm">+</span>8. Precatórios: a restrição de 2024</summary>
+        <div class="acc-body">
+          <p><span class="lbl">O que são</span>Precatórios são dívidas do Município reconhecidas em decisão judicial definitiva. Municípios com grande volume de precatórios em atraso ficam submetidos a um regime especial, no qual depositam mensalmente um valor junto ao Tribunal de Justiça, que se encarrega dos pagamentos.</p>
+          <p><span class="lbl">A situação de Valença</span>Desde 25/03/2024 consta no CAUC registro de inadimplência do Município no regime especial do TJRJ. A própria juíza responsável pelo departamento de precatórios do TJRJ já expediu dois ofícios ao Tesouro Nacional solicitando a retirada da restrição, sem resultado. Em 31/12/2025, a Procuradoria ajuizou ação cautelar na Justiça Federal; a liminar preservou o recurso de uma emenda parlamentar, mas o pedido de exclusão da restrição aguarda julgamento de mérito. O procurador já despachou com o juiz da causa.</p>
+          <p><span class="lbl">O que isso significa</span>O obstáculo atual parece ser o registro mantido pelo Tesouro, e não uma inadimplência corrente perante o Tribunal. A solução depende de decisão judicial ou de revisão administrativa pelo Tesouro.</p>
+          <p><span class="lbl">Cuidados</span>É indispensável manter em dia os depósitos atuais ao TJRJ, pois qualquer atraso novo justificaria a restrição e enfraqueceria o pedido do Município. Em caso de inadimplência efetiva, a Constituição prevê o sequestro de valores das contas municipais, a retenção de repasses do Fundo de Participação dos Municípios e a responsabilização do Prefeito.</p>
+          <p><span class="lbl">Por que é o ponto crítico</span>Das três pendências do CAUC, esta é a única cuja solução não depende apenas de providências do Município. Por isso, é a que mais provavelmente determinará a data em que o CAUC será liberado.</p>
+        </div></details>
+
+        <details class="plus"><summary><span class="pm">+</span>9. CADIN e manutenção dos demais itens do CAUC</summary>
+        <div class="acc-body">
+          <p><span class="lbl">CADIN</span>O Município foi inscrito no cadastro de devedores do setor público federal por débitos com o Conselho Regional de Farmácia do Rio de Janeiro, autarquia federal. As notificações nº 3359 e nº 3698 datam de 27/07/2026. Débitos dessa natureza costumam decorrer de anuidades ou de multas pela ausência de farmacêutico responsável em unidades de saúde. A solução envolve identificar os débitos, quitá-los ou parcelá-los, solicitar a baixa ao Conselho e corrigir a causa, para evitar novas autuações.</p>
+          <p><span class="lbl">Itens que vencem em breve</span>Os demais itens do CAUC estão regulares, mas alguns precisam ser renovados periodicamente. A regularidade do FGTS vence em 15/11/2026; o RREO e a Matriz de Saldos Contábeis mensal, em 30/11/2026. A perda de qualquer prazo criaria uma nova pendência enquanto as atuais são resolvidas.</p>
+        </div></details>
+
+        <details class="plus"><summary><span class="pm">+</span>10. Como as frentes se relacionam</summary>
+        <div class="acc-body">
+          <p>As frentes não são independentes. A correção dos termos de parcelamento (frente de aportes) é condição para a regularidade do DIPR, que por sua vez é condição para o CRP. O CRP é um dos três itens pendentes do CAUC. O CAUC só é liberado quando os três itens, CRP, precatórios e CADIN, estiverem regularizados simultaneamente.</p>
+          <p>A recuperação do COMPREV corre em paralelo e não depende do CAUC, mas também melhora a situação financeira do PREVI e reduz a pressão sobre o Tesouro municipal.</p>
+          <p>O <b>caminho crítico</b>, isto é, a sequência que define o prazo final, passa por dois eventos externos ao Município: a decisão sobre a restrição de precatórios e a aprovação do convênio de previdência complementar pela Previc. As demais providências dependem essencialmente da ação interna e podem ser concluídas antes.</p>
+        </div></details>
+
+        <details class="plus"><summary><span class="pm">+</span>11. Principais riscos</summary>
+        <div class="acc-body">
+          <ul class="actors">
+            <li><b>Dependência de decisões externas.</b> Justiça Federal, Tesouro, Ministério e Previc têm prazos próprios, que o Município não controla.</li>
+            <li><b>Solução apenas provisória.</b> O CRP emergencial vence em seis meses. Sem a correção definitiva, o problema retorna.</li>
+            <li><b>Novas pendências.</b> Atrasos em renovações de rotina, como FGTS e relatórios fiscais, ou nos depósitos de precatórios, podem gerar restrições novas.</li>
+            <li><b>Erros normativos.</b> Leis enviadas com objeto ou valores incorretos geram passivo jurídico e atrasam a regularização.</li>
+            <li><b>Perda de créditos.</b> Requerimentos de compensação sem resposta podem ser indeferidos.</li>
+            <li><b>Concentração de conhecimento.</b> A operação dos sistemas previdenciários está concentrada em uma única pessoa.</li>
+          </ul>
+        </div></details>
+
+        <details class="plus"><summary><span class="pm">+</span>12. Governança e próximos passos</summary>
+        <div class="acc-body">
+          <p><span class="lbl">Governança</span>A coordenação do grupo cabe à Secretaria de Fazenda. Nenhum projeto de lei relativo à previdência será enviado à Câmara sem revisão prévia do grupo. O acompanhamento das metas é feito neste painel, atualizado a cada avanço comunicado.</p>
+          <p><span class="lbl">Providências imediatas, nos próximos quinze dias</span></p>
+          <ol class="steps">
+            <li>Colher a assinatura do Prefeito no pedido de CRP emergencial e no convênio da RJPrev, e enviá-los.</li>
+            <li>Obter o extrato do CRP no CADPREV, para confirmar que não há outras irregularidades.</li>
+            <li>Renovar a regularidade do FGTS antes de 15/11.</li>
+            <li>Identificar e quitar os débitos com o Conselho Regional de Farmácia.</li>
+            <li>Confirmar no balancete se o fluxo mensal do COMPREV já é recebido e levantar os requerimentos com exigência.</li>
+            <li>Obter do atuário, por escrito, os valores devidos por exercício.</li>
+            <li>Confirmar com o TJRJ a regularidade dos depósitos atuais e reiterar ao Tesouro o pedido de retirada da restrição.</li>
+          </ol>
+        </div></details>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= CAUC ================= -->
+  <div class="stats-section" id="sec-cauc">
+    <button type="button" class="stats-toggle" aria-expanded="false"><span class="stats-toggle-icon">+</span>Situação do CAUC</button>
+    <div class="stats-panel">
+      <div class="stats-panel-header"><h2>Situação do CAUC</h2><p>Extrato oficial do Tesouro Nacional de 05/11/2026 · O CAUC só fica limpo quando os três itens estiverem resolvidos</p></div>
+      <div class="sp-body">
+        <div class="cauc">
+          <div class="citem"><span class="code">Item 1.2 · Precatórios judiciais</span><b>Restrição de 2024 no regime especial do TJRJ</b><p>Registro de 25/03/2024. O TJRJ já pediu duas vezes ao Tesouro a retirada, sem resultado. Ação cautelar na Justiça Federal com mérito pendente. Responsável: Pedro. Metas P1 a P3.</p></div>
+          <div class="citem"><span class="code">Item 1.5 · CADIN</span><b>Conselho Regional de Farmácia do RJ</b><p>Duas notificações (nº 3359 e nº 3698), de 27/07/2026. Responsável: Rafael. Metas D1 a D3.</p></div>
+          <div class="citem"><span class="code">Item 4.2 · Regularidade previdenciária</span><b>PREVI Valença sem CRP</b><p>Pendências no DIPR (termos 0875 e 1219) e no convênio de previdência complementar. Responsável: Juarez. Metas R1 a R5.</p></div>
+        </div>
+        <div class="note"><b>Vencimentos próximos:</b> itens hoje regulares que precisam ser renovados para não virarem novas pendências. FGTS vence em <b>15/11/2026</b>; RREO e Matriz de Saldos Contábeis mensal vencem em <b>30/11/2026</b>. Metas M1 e M2.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= FRENTES ================= -->
+  <div class="stats-section" id="sec-frentes">
+    <button type="button" class="stats-toggle" aria-expanded="false"><span class="stats-toggle-icon">+</span>Explicação das frentes</button>
+    <div class="stats-panel">
+      <div class="stats-panel-header"><h2>Explicação das frentes</h2><p>Por que cada frente importa e o que pode dar errado</p></div>
+      <div class="sp-body"><div class="acc-list" id="frentesList"></div></div>
+    </div>
+  </div>
+
+  <!-- ================= GLOSSÁRIO ================= -->
+  <div class="stats-section" id="sec-glossario">
+    <button type="button" class="stats-toggle" aria-expanded="false"><span class="stats-toggle-icon">+</span>Entenda os termos</button>
+    <div class="stats-panel">
+      <div class="stats-panel-header"><h2>Entenda os termos</h2><p>Toque no + para abrir cada explicação</p></div>
+      <div class="sp-body"><div class="acc-list" id="glossario"></div></div>
+    </div>
+  </div>
+
+  <!-- ================= HISTÓRICO ================= -->
+  <div class="stats-section" id="sec-historico">
+    <button type="button" class="stats-toggle" aria-expanded="false"><span class="stats-toggle-icon">+</span>Histórico de avanços</button>
+    <div class="stats-panel">
+      <div class="stats-panel-header"><h2>Histórico de avanços</h2><p>Do mais recente para o mais antigo</p></div>
+      <div class="sp-body"><div class="timeline" id="timeline"></div></div>
+    </div>
+  </div>
+
+  <footer>
+    Prazos propostos em 05/11/2026, a validar pela coordenação.<br>
+    Para registrar um avanço, envie a novidade ao Sergio, que atualiza este painel.
+  </footer>
+</main>
+
+<script>
+/* ===================== DADOS (editar aqui a cada atualização) ===================== */
+const ATUALIZADO = "06/11/2026";
+
+const PESSOAS = {
+  "Denise":       "Secretária de Fazenda · coordenação geral e contabilidade",
+  "Juarez":       "PREVI Valença · COMPREV, CADPREV e CRP",
+  "Atuário":      "Cálculo atuarial do PREVI",
+  "Procuradoria": "Leonardo (redação e parecer) · Dudu acompanha na Câmara",
+  "Pedro":        "Procurador do Município · precatórios",
+  "Rafael":       "Pendência do CADIN (Conselho de Farmácia)"
+};
+
+const FRENTES = [
+  {id:"C", nome:"1 · COMPREV",
+   why:"Transformar os R$ 25,5 milhões em receita e criar fluxo mensal permanente.",
+   importancia:"É receita a que o município já tem direito. O fluxo de cerca de R$ 537 mil por mês (aproximadamente R$ 6,5 milhões por ano) e os R$ 25 milhões acumulados aliviam o caixa do PREVI e, portanto, o Tesouro municipal, que cobre o déficit da previdência. Uma rotina permanente transforma boladas esporádicas em receita mensal previsível.",
+   riscos:"Requerimentos com exigência sem resposta podem ser indeferidos. Os R$ 25 milhões tendem a ser pagos aos poucos e não podem ser tratados como receita certa em 2026. O dinheiro só pode pagar benefícios previdenciários. Hoje há dependência de uma só pessoa (o Juarez): se ele sair, o conhecimento sai junto."},
+  {id:"A", nome:"2 · Aportes e parcelamentos",
+   why:"Saber exatamente quanto se deve ao PREVI e corrigir os acordos que derrubam o CRP.",
+   importancia:"O aporte é o valor que o cálculo atuarial definiu como necessário para cobrir o déficit do PREVI ao longo do tempo. Cada parcela não paga aumenta o rombo futuro, que no fim é pago pela própria prefeitura.",
+   riscos:"Aporte não pago ou parcelamento mal cadastrado derruba o CRP. Números divergentes entre DIPR, CADPREV e lei municipal travam o sistema mesmo quando o pagamento foi feito. Leis com objeto ou valores errados criam passivo jurídico. Parcelamento com atualização abaixo da meta atuarial pode ser rejeitado pelo Ministério."},
+  {id:"R", nome:"3 · Regularidade previdenciária (CRP)",
+   why:"Recuperar o CRP e tirar o item 4.2 do CAUC.",
+   importancia:"Sem CRP, o município fica impedido de receber transferências voluntárias da União, firmar convênios e obter empréstimos de bancos federais, como Caixa e BNDES.",
+   riscos:"O CRP emergencial vale até seis meses e só é prorrogado com prova de que as causas estão sendo corrigidas; é o segundo pedido emergencial, sinal de que a causa de fundo continua. O DIPR é enviado periodicamente: se não for corrigido, o CRP volta a cair. A previdência complementar depende de aprovação da Previc, que não é imediata."},
+  {id:"P", nome:"4 · Precatórios (CAUC 1.2)",
+   why:"Retirar a restrição de 2024 que o Tesouro mantém no CAUC.",
+   importancia:"É a pendência mais antiga, registrada em 25/03/2024. A própria juíza do departamento de precatórios do TJRJ já pediu duas vezes ao Tesouro a retirada, e o município tem uma ação cautelar na Justiça Federal com o pedido de exclusão. Sozinha, essa restrição mantém o CAUC travado mesmo com CRP e CADIN resolvidos.",
+   riscos:"O prazo depende do Judiciário ou de o Tesouro rever sua posição. Para não enfraquecer o pedido, é essencial manter os depósitos atuais ao TJRJ em dia: um atraso novo justificaria a restrição. Em caso de inadimplência real, a Constituição (art. 104 do ADCT) prevê sequestro de valores, retenção do FPM e responsabilização do prefeito."},
+  {id:"D", nome:"5 · CADIN (CAUC 1.5)",
+   why:"Quitar os débitos com o Conselho Regional de Farmácia e evitar novas notificações.",
+   importancia:"Mesmo pequeno, o débito sozinho bloqueia transferências voluntárias. É provavelmente a pendência mais rápida de resolver.",
+   riscos:"Se a causa for estrutural (unidade de saúde sem farmacêutico responsável registrado), novas multas surgem e o município volta ao CADIN."},
+  {id:"M", nome:"6 · Manutenção do CAUC",
+   why:"Renovar a tempo os itens que hoje estão regulares.",
+   importancia:"Todos os demais itens do CAUC estão comprovados. Mantê-los assim evita que o trabalho de resolver as três pendências seja anulado por uma nova.",
+   riscos:"FGTS (15/11), RREO e Matriz de Saldos Contábeis (30/11) vencem em novembro. Um atraso de envio gera pendência nova."}
+];
+
+/* status: "concluida" | "andamento" | "aberta" | "vigente"; risco:true força âmbar */
+const METAS = [
+  {id:"C1", f:"C", t:"Confirmar no balancete se o fluxo mensal do COMPREV já está entrando", resp:["Denise"], prazo:"2026-11-14", status:"aberta",
+   entrega:"Receitas do COMPREV em 2026, mês a mês",
+   oque:"Verificar na contabilidade se os R$ 537,7 mil mensais já são recebidos pelo PREVI.",
+   porque:"Se já entram, não são receita nova. Isso muda a conta de quanto o trabalho pode trazer de fato.",
+   risco:"Contar duas vezes o mesmo dinheiro no planejamento."},
+  {id:"C2", f:"C", t:"Levantar os requerimentos com exigência", resp:["Juarez"], prazo:"2026-11-20", status:"aberta",
+   entrega:"Planilha com quantidade, valor estimado e tipo de cada exigência",
+   oque:"Listar todos os pedidos que o INSS devolveu pedindo correção ou documento.",
+   porque:"É o dinheiro parado por falta de resposta do município. Os R$ 25,5 mi provavelmente não incluem esse valor.",
+   risco:"Requerimentos sem resposta podem ser indeferidos e o direito se perde ou precisa ser refeito."},
+  {id:"C3", f:"C", t:"Obter o cronograma de recebimento do fluxo acumulado", resp:["Juarez"], prazo:"2026-11-27", status:"aberta",
+   entrega:"Nota com a forma e o prazo de pagamento dos R$ 24,99 mi",
+   oque:"Confirmar com o Ministério da Previdência e o INSS como e quando os atrasados serão pagos.",
+   porque:"O INSS não paga tudo de uma vez. Saber o ritmo permite planejar o caixa do PREVI.",
+   risco:"Tratar como receita certa em 2026 um valor que pode chegar ao longo de anos."},
+  {id:"C4", f:"C", t:"Responder as exigências de maior valor", resp:["Juarez"], prazo:"2026-12-18", status:"aberta",
+   entrega:"Exigências prioritárias respondidas no sistema COMPREV",
+   oque:"Atacar primeiro as exigências que destravam mais dinheiro ou são mais fáceis de resolver.",
+   porque:"Cada exigência respondida entra na fila de análise e passa a gerar atrasados e fluxo mensal.",
+   risco:"Mais estoque parado e mais risco de indeferimento."},
+  {id:"C5", f:"C", t:"Criar a rotina permanente de recuperação do COMPREV", resp:["Denise","Juarez"], prazo:"2026-12-31", status:"aberta",
+   entrega:"Equipe designada, procedimento escrito e relatório mensal",
+   oque:"Definir quem opera o COMPREV, com que frequência e como presta contas.",
+   porque:"Com rotina, as boladas acumuladas deixam de existir e viram fluxo mensal que ajuda a pagar a folha da previdência.",
+   risco:"Dependência de uma só pessoa."},
+
+  {id:"A1", f:"A", t:"Levantar valores devidos ao PREVI e obrigações futuras", resp:["Atuário"], prazo:"2026-11-20", status:"aberta",
+   entrega:"Documento escrito com valores por exercício e aportes previstos no cálculo atuarial",
+   oque:"Quantificar o que está em atraso e o que vence nos próximos anos.",
+   porque:"É a base para a lei de parcelamento e para corrigir o DIPR.",
+   risco:"Leis e acordos com valores errados, como na Mensagem 100/2026."},
+  {id:"A2", f:"A", t:"Corrigir o termo de parcelamento 0875 no CADPREV", resp:["Juarez"], prazo:"2026-11-30", status:"aberta",
+   entrega:"Termo 0875 regular no CADPREV",
+   oque:"Corrigir o erro de data que gera a pendência no DIPR.",
+   porque:"É uma das causas da falta de CRP.",
+   risco:"O CRP continua dependendo de emissão emergencial, que vence em seis meses."},
+  {id:"A3", f:"A", t:"Concluir a análise do termo de parcelamento 1219", resp:["Juarez"], prazo:"2026-12-15", status:"andamento",
+   entrega:"Termo 1219 analisado e regular no CADPREV",
+   oque:"Acompanhar junto ao Ministério a análise pendente.",
+   porque:"É a segunda causa da pendência no DIPR.",
+   risco:"CRP só por via emergencial."},
+  {id:"A4", f:"A", t:"Revisar a Mensagem 100/2026 antes de tramitar", resp:["Procuradoria"], prazo:"2026-11-27", status:"andamento",
+   entrega:"Projeto retirado ou substituído, com objeto, valores e competências validados pelo atuário",
+   oque:"O projeto tratava de contribuições patronais, mas o débito é de aporte não repassado. Precisa de novo texto.",
+   porque:"A lei de parcelamento pode ser aprovada até o fim de dezembro e é necessária para regularizar o aporte.",
+   risco:"Lei com objeto errado gera passivo jurídico e não resolve a pendência."},
+
+  {id:"R1", f:"R", t:"Puxar o extrato do CRP no CADPREV", resp:["Juarez"], prazo:"2026-11-12", status:"aberta",
+   entrega:"Extrato com todos os critérios irregulares",
+   oque:"O CAUC só mostra que o CRP está pendente. O extrato do CADPREV detalha cada critério.",
+   porque:"Confirma se há outras pendências além do DIPR e da previdência complementar.",
+   risco:"Descobrir uma pendência nova só depois de resolver as conhecidas."},
+  {id:"R2", f:"R", t:"Enviar o pedido de CRP emergencial pelo Gescon", resp:["Juarez"], prazo:"2026-11-12", status:"andamento",
+   entrega:"Pedido protocolado no Gescon, assinado pelo prefeito e pelo gestor do PREVI",
+   oque:"Pedido com base no art. 249 da Portaria MTP 1.467/2022: as pendências do DIPR não são de responsabilidade do RPPS. O sistema exige a assinatura do prefeito (representante do ente) e do Juarez (representante do RPPS).",
+   porque:"É o caminho mais rápido para tirar o item 4.2 do CAUC.",
+   risco:"A emissão depende da análise do Ministério. É o segundo pedido emergencial."},
+  {id:"R3", f:"R", t:"Obter o CRP emergencial emitido", resp:["Juarez"], prazo:"2026-12-05", status:"aberta",
+   entrega:"CRP emitido e item 4.2 comprovado no CAUC",
+   oque:"Acompanhar o pedido até a emissão do certificado.",
+   porque:"Libera o item 4.2 do CAUC por até seis meses.",
+   risco:"Confirmar se o pedido cobre também a previdência complementar ou só o DIPR."},
+  {id:"R4", f:"R", t:"Assinar e enviar o convênio com a RJPrev", resp:["Juarez"], prazo:"2026-11-14", status:"andamento",
+   entrega:"Convênio assinado pelo prefeito e enviado à RJPrev",
+   oque:"Formalizar a adesão do município ao plano de previdência complementar da RJPrev.",
+   porque:"É uma das duas pendências do CRP.",
+   risco:"Depois do envio ainda há a aprovação da Previc. Quanto mais tarde o envio, mais tarde o CRP."},
+  {id:"R5", f:"R", t:"Aprovação do convênio pela Previc e regularização no CADPREV", resp:["Juarez"], prazo:"2026-12-18", status:"aberta",
+   entrega:"Convênio aprovado e critério regular no extrato do CRP",
+   oque:"A RJPrev envia o convênio à Previc, que aprova e informa a Secretaria de Previdência.",
+   porque:"Fecha a pendência da previdência complementar de forma definitiva.",
+   risco:"Prazo depende de órgãos externos. Acompanhar a data de cada etapa."},
+
+  {id:"P1", f:"P", t:"Confirmar com o TJRJ que os depósitos atuais do regime especial estão em dia", resp:["Pedro"], prazo:"2026-11-20", status:"aberta",
+   entrega:"Certidão ou ofício do TJRJ sobre a regularidade atual dos depósitos",
+   oque:"Garantir que a única pendência é a restrição antiga de 2024, sem atraso atual.",
+   porque:"Sustenta o pedido de baixa no Tesouro e na Justiça Federal.",
+   risco:"Se houver atraso atual, a restrição se justifica e o pedido perde força."},
+  {id:"P2", f:"P", t:"Reiterar ao Tesouro Nacional o pedido de retirada da restrição", resp:["Pedro"], prazo:"2026-11-27", status:"aberta",
+   entrega:"Pedido administrativo à STN com os dois ofícios do TJRJ anexados",
+   oque:"A juíza do departamento de precatórios do TJRJ já expediu dois ofícios ao Tesouro pedindo a retirada da restrição de 2024, sem resultado. Insistir pela via administrativa, em paralelo à ação judicial.",
+   porque:"Se o Tesouro aceitar, é o caminho mais rápido para liberar o item 1.2.",
+   risco:"Sem resposta, a baixa passa a depender só da Justiça Federal."},
+  {id:"P3", f:"P", t:"Obter decisão de mérito na ação cautelar na Justiça Federal", resp:["Pedro"], prazo:"2026-12-31", status:"andamento",
+   entrega:"Decisão que determine a exclusão da restrição e item 1.2 comprovado no CAUC",
+   oque:"Ação ajuizada em 31/12/2025. A liminar salvou o recurso de uma emenda, mas o pedido de exclusão da restrição ainda não foi julgado. Pedro já despachou com o juiz.",
+   porque:"Sem a baixa, o CAUC continua travado mesmo com CRP e CADIN resolvidos.",
+   risco:"O prazo depende do Judiciário. Uma decisão desfavorável manteria a restrição."},
+
+  {id:"D1", f:"D", t:"Identificar os débitos com o Conselho Regional de Farmácia", resp:["Rafael"], prazo:"2026-11-13", status:"aberta",
+   entrega:"Origem e valor das notificações nº 3359 e nº 3698",
+   oque:"Descobrir a que se referem as duas notificações de 27/07/2026.",
+   porque:"Em geral são anuidades ou multas por falta de farmacêutico responsável em alguma unidade.",
+   risco:"Pagar sem entender a causa e receber novas notificações."},
+  {id:"D2", f:"D", t:"Quitar ou parcelar e pedir a baixa no CADIN", resp:["Rafael"], prazo:"2026-11-27", status:"aberta",
+   entrega:"Item 1.5 comprovado no CAUC",
+   oque:"Pagar ou parcelar e solicitar ao Conselho a retirada do registro.",
+   porque:"Provavelmente é a pendência mais simples e rápida do CAUC.",
+   risco:"A baixa depende do Conselho atualizar o registro. Acompanhar até aparecer no extrato."},
+  {id:"D3", f:"D", t:"Corrigir a causa para evitar novas notificações", resp:["Rafael"], prazo:"2026-12-18", status:"aberta",
+   entrega:"Unidades de saúde com responsável técnico registrado no Conselho",
+   oque:"Verificar se todas as farmácias e unidades com dispensação de medicamentos têm farmacêutico registrado.",
+   porque:"Se a causa for estrutural, novas multas vão surgir.",
+   risco:"O município volta ao CADIN logo depois de sair."},
+
+  {id:"M1", f:"M", t:"Renovar a regularidade do FGTS", resp:["Denise"], prazo:"2026-11-14", status:"aberta",
+   entrega:"Item 1.3 do CAUC com nova validade (vence 15/11)",
+   oque:"O certificado de regularidade do FGTS vence em 15/11/2026.",
+   porque:"Hoje está regular. Se vencer, vira mais uma pendência no CAUC.",
+   risco:"Ganhar uma pendência nova enquanto se resolvem as antigas."},
+  {id:"M2", f:"M", t:"Enviar RREO e Matriz de Saldos Contábeis no prazo", resp:["Denise"], prazo:"2026-11-30", status:"aberta",
+   entrega:"Itens 3.2 e 3.4.1 do CAUC com nova validade",
+   oque:"Os relatórios fiscais e a matriz mensal vencem em 30/11/2026.",
+   porque:"Manter regular o que já está regular.",
+   risco:"Pendência nova no CAUC por atraso de envio."}
+];
+
+const AVANCOS = [
+  {d:"2026-11-06", t:"Assessoria do deputado André Corrêa informou que a adesão à RJPrev não tem custo para o município e conta com pareceres do TCE e da PGE sem restrições. Sugeriu avaliar a inclusão dos cargos eletivos no plano, sem contribuição patronal, como ocorreu em outros municípios com boa adesão.", m:["R4"]},
+  {d:"2026-11-05", t:"Pedro informou que a juíza do departamento de precatórios do TJRJ já expediu dois ofícios ao Tesouro pedindo a retirada da restrição de 2024, sem resultado. Em 31/12/2025 ele ajuizou ação cautelar na Justiça Federal: a liminar salvou o recurso de uma emenda, mas o pedido de exclusão da restrição aguarda julgamento de mérito. Já despachou com o juiz.", m:["P2","P3"]},
+  {d:"2026-11-05", t:"Esclarecidas as assinaturas exigidas pelo Ministério: no CRP emergencial, prefeito (representante do ente) e Juarez (representante do RPPS); nos termos de parcelamento, também a Denise (ordenadora de despesa). Para tirar o prefeito das assinaturas, seria preciso alteração cadastral aprovada pelo Ministério.", m:["R2","A2","A3"]},
+  {d:"2026-11-05", t:"Juarez recebeu toda a documentação da RJPrev para o convênio de previdência complementar. Aguarda assinatura do prefeito para enviar.", m:["R4"]},
+  {d:"2026-11-05", t:"Juarez preencheu o pedido de CRP emergencial com base no art. 249 da Portaria MTP 1.467/2022. Aguarda assinatura do prefeito para enviar pelo Gescon.", m:["R2"]},
+  {d:"2026-11-05", t:"Juarez informou que o termo 0875 tem erro de data e o termo 1219 aguarda análise no Ministério.", m:["A2","A3"]},
+  {d:"2026-11-05", t:"Extrato do CAUC com três pendências (precatórios, CADIN e regularidade previdenciária). Responsáveis definidos pela Denise: Pedro, Rafael e Juarez.", m:["P1","D1","R1"]},
+  {d:"2026-10-19", t:"Acordado que nenhuma lei sobre previdência vai à Câmara sem passar pelo grupo.", m:[]},
+  {d:"2026-10-19", t:"Identificado erro de objeto na Mensagem 100/2026. Dudu segurou a tramitação e Leonardo ficou de retificar.", m:["A4"]},
+  {d:"2026-10-19", t:"Juarez levantou no sistema COMPREV: R$ 24.992.769,63 de fluxo acumulado e R$ 537.728,84 de fluxo mensal, total de R$ 25.530.499,47.", m:["C1","C3"]}
+];
+
+const GLOSSARIO = [
+  ["PREVI Valença (RPPS)", "Instituto que paga as aposentadorias e pensões dos servidores municipais concursados. RPPS significa Regime Próprio de Previdência Social. Quando o dinheiro do instituto não basta, quem cobre a diferença é a prefeitura."],
+  ["COMPREV (compensação previdenciária)", "Muitos servidores trabalharam antes no setor privado e contribuíram para o INSS. Quando se aposentam pelo PREVI, o município paga a aposentadoria inteira, mas tem direito a ser ressarcido pelo INSS pela parte do tempo contribuída lá. Cada aposentadoria vira um requerimento num sistema federal também chamado COMPREV. O dinheiro recebido só pode pagar benefícios."],
+  ["Fluxo, fluxo acumulado e estoque", "Fluxo mensal é o que o INSS reembolsa todo mês pelos benefícios já aprovados (R$ 537,7 mil). Fluxo acumulado são os atrasados, desde o início de cada benefício até a aprovação (R$ 24,99 mi), e costumam ser pagos aos poucos. Estoque se refere a benefícios anteriores a 1999; em Valença está zerado, o que é normal."],
+  ["Requerimento com exigência", "Pedido de compensação que o INSS devolveu pedindo documento ou correção. Enquanto ninguém responde, o processo não entra na fila de análise e não gera dinheiro. Se ficar muito tempo parado, pode ser indeferido."],
+  ["CRP (Certificado de Regularidade Previdenciária)", "Certidão do Ministério da Previdência dizendo que o regime próprio do município cumpre as regras. Sem ela, o município não recebe transferências voluntárias da União, não firma convênios e não obtém empréstimos de bancos federais."],
+  ["CRP emergencial", "Certificado provisório que o Ministério pode emitir quando as pendências estão em correção ou não dependem do município. Vale até seis meses e só é prorrogado se o município comprovar que está resolvendo as causas. É uma ponte, não a solução."],
+  ["CAUC", "Cadastro do Tesouro Nacional que reúne num só extrato todas as exigências para o município receber recursos voluntários da União: tributos, precatórios, CADIN, relatórios fiscais, CRP etc. Basta um item pendente para travar convênios."],
+  ["CADPREV, DIPR e Gescon", "CADPREV é o sistema do Ministério da Previdência com os dados do PREVI e os acordos de parcelamento. DIPR é o demonstrativo em que o município informa contribuições, aportes e parcelas pagas; se não bate com o CADPREV, o CRP cai. Gescon é o canal oficial para pedidos ao Ministério, como o de CRP emergencial."],
+  ["Aporte e déficit atuarial", "O cálculo atuarial projeta quanto o PREVI vai precisar para pagar todos os benefícios futuros. A diferença entre isso e o que existe é o déficit atuarial. Aporte é o valor que a prefeitura se compromete por lei a depositar para cobrir esse déficit ao longo dos anos. Aporte não pago pode derrubar o CRP."],
+  ["Termo de acordo de parcelamento", "Contrato pelo qual a prefeitura parcela valores devidos ao PREVI. Precisa de lei municipal e de cadastro correto no CADPREV. Valença tem dois termos com problema: 0875 (erro de data) e 1219 (aguardando análise)."],
+  ["Previdência complementar, RJPrev e Previc", "Desde a reforma de 2019, todo município com regime próprio precisa oferecer previdência complementar aos servidores que ganham acima do teto do INSS, por meio de convênio com uma entidade gestora. Valença vai aderir à RJPrev, que atende cerca de 40 municípios. O convênio só vale depois de aprovado pela Previc, órgão federal que fiscaliza esses planos."],
+  ["Precatórios (regime especial)", "Dívidas da prefeitura reconhecidas pela Justiça. Municípios com muitos precatórios atrasados ficam num regime especial e precisam depositar todo mês um valor no Tribunal de Justiça. Sem os depósitos, cabem sequestro de contas, retenção do FPM e responsabilização do prefeito."],
+  ["CADIN", "Cadastro federal de quem tem dívida vencida com órgãos públicos federais. Conselhos profissionais, como o de Farmácia, são autarquias federais: uma anuidade ou multa não paga leva o município ao CADIN e trava o CAUC."]
+];
+/* ================================================================================== */
+
+const HOJE = new Date(); HOJE.setHours(0,0,0,0);
+const DIA = 86400000;
+const parse = s => { const [y,m,d] = s.split("-").map(Number); return new Date(y, m-1, d); };
+const fmt = s => s ? s.split("-").reverse().join("/") : "Permanente";
+const fmtShort = s => s ? fmt(s).slice(0,5) : "";
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const MESES = [{key:"nov", m:10, full:"Novembro"}, {key:"dez", m:11, full:"Dezembro"}];
+
+function semaforo(meta){
+  if (meta.status === "concluida" || meta.status === "vigente") return "green";
+  if (meta.risco) return "amber";
+  if (meta.prazo){
+    const diff = (parse(meta.prazo) - HOJE) / DIA;
+    if (diff < 0) return "red";
+    if (diff <= 7) return "amber";
+  }
+  return "gray";
+}
+const SEM_LBL = {green:"Cumprida", amber:"Risco de atraso", red:"Atrasada", gray:"No prazo, em aberto"};
+const ST_LBL = {concluida:"concluída", andamento:"em andamento", aberta:"não iniciada", vigente:"vigente"};
+const advFor = id => AVANCOS.filter(a => a.m.includes(id)).sort((a,b) => b.d.localeCompare(a.d));
+
+function chipFor(meta, mes){
+  const st = semaforo(meta);
+  const inMonth = meta.prazo ? parse(meta.prazo).getMonth() === mes.m : true;
+  if (!inMonth) return `<span class="chip gray na"><span class="main">—</span><span class="sub">sem entrega</span></span>`;
+  const main = st === "green" ? "✓" : (meta.status === "andamento" ? "◐" : "—");
+  const sub = meta.prazo ? `até ${fmtShort(meta.prazo)}` : "vigente";
+  const last = advFor(meta.id)[0];
+  let tt = `${meta.id} · ${SEM_LBL[st]} (${ST_LBL[meta.status]})\nEntrega: ${meta.entrega}\nPrazo: ${fmt(meta.prazo)}`;
+  if (last) tt += `\n\nÚltimo avanço (${fmt(last.d)}): ${last.t}`;
+  return `<span class="chip ${st}" title="${esc(tt)}" tabindex="0"><span class="main">${main}</span><span class="sub">${sub}</span></span>`;
+}
+
+function aggregate(rows, mes){
+  const app = rows.filter(r => !r.prazo || parse(r.prazo).getMonth() === mes.m).map(semaforo);
+  if (!app.length) return "na";
+  if (app.includes("red")) return "red";
+  if (app.includes("amber")) return "amber";
+  if (app.every(s => s === "green")) return "green";
+  return "gray";
+}
+
+/* filtros */
+const fFrente = document.getElementById("fFrente"), fResp = document.getElementById("fResp"),
+      fStatus = document.getElementById("fStatus"), fBusca = document.getElementById("fBusca");
+FRENTES.forEach(f => fFrente.insertAdjacentHTML("beforeend", `<option value="${f.id}">${esc(f.nome)}</option>`));
+Object.keys(PESSOAS).forEach(p => fResp.insertAdjacentHTML("beforeend", `<option value="${esc(p)}">${esc(p)}</option>`));
+
+function filtered(){
+  const q = fBusca.value.trim().toLowerCase();
+  return METAS.filter(m => {
+    if (fFrente.value && m.f !== fFrente.value) return false;
+    if (fResp.value && !m.resp.includes(fResp.value)) return false;
+    if (fStatus.value && semaforo(m) !== fStatus.value) return false;
+    if (q){
+      const hay = [m.id, m.t, m.entrega, m.oque, m.porque, m.risco, m.resp.join(" ")].join(" ").toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    return true;
+  });
+}
+const anyFilter = () => fFrente.value || fResp.value || fStatus.value || fBusca.value.trim();
+
+let openGroups = new Set(), openDetails = new Set();
+
+const filtersToggle = document.getElementById("filtersToggle"), headerFilters = document.getElementById("headerFilters");
+filtersToggle.addEventListener("click", () => {
+  const open = headerFilters.hidden;
+  headerFilters.hidden = !open;
+  filtersToggle.setAttribute("aria-expanded", open);
+  filtersToggle.querySelector(".ft-icon").textContent = open ? "−" : "+";
+});
+
+function render(){
+  const nAct = [fFrente.value, fResp.value, fStatus.value, fBusca.value.trim()].filter(Boolean).length;
+  document.getElementById("filtersActive").textContent = nAct ? nAct + " ativo" + (nAct > 1 ? "s" : "") : "";
+  const items = filtered();
+  const tbody = document.getElementById("tbody");
+  if (!items.length){
+    tbody.innerHTML = `<tr><td colspan="6" class="empty-state">Nenhuma meta encontrada para os filtros selecionados.</td></tr>`;
+    return;
+  }
+  const autoOpen = !!anyFilter();
+  let html = "";
+  FRENTES.forEach(fr => {
+    const rows = items.filter(m => m.f === fr.id);
+    if (!rows.length) return;
+    const open = autoOpen || openGroups.has(fr.id);
+    const chips = MESES.map(mes => {
+      const st = aggregate(rows, mes);
+      const strong = ["green","amber","red"].includes(st);
+      const bg = strong ? `var(--${st})` : "var(--gray-bg)";
+      const color = strong ? "#fff" : "var(--gray)";
+      return `<td class="month-cell"><span class="grp-chip" style="background:${bg};color:${color}">${st === "na" ? "—" : "●"}</span></td>`;
+    }).join("");
+    html += `<tr class="group-row" data-group="${fr.id}">
+      <td colspan="4"><div class="grp-name"><span class="grp-toggle">${open ? "−" : "+"}</span>${esc(fr.nome)}<span class="grp-meta">${rows.length} meta${rows.length > 1 ? "s" : ""}<span class="grp-why"> · ${esc(fr.why)}</span></span></div></td>
+      ${chips}</tr>`;
+    rows.forEach(m => {
+      const dOpen = openDetails.has(m.id);
+      const adv = advFor(m.id);
+      html += `<tr class="meta-row ${open ? "" : "hidden"}" data-g="${fr.id}">
+        <td class="col-x"><button type="button" class="expand-btn" data-detail="${m.id}" aria-label="Ver explicação da meta ${m.id}" aria-expanded="${dOpen}">${dOpen ? "−" : "+"}</button></td>
+        <td class="col-resp">${esc(m.resp.join(" e "))}<small>${esc(PESSOAS[m.resp[0]].split(" · ")[0])}</small></td>
+        <td class="col-meta"><span class="meta-id">${m.id}</span><span class="indicador-text">${esc(m.t)}</span><span class="entrega-text">Entrega: ${esc(m.entrega)}</span></td>
+        <td class="col-prazo">${fmt(m.prazo)}</td>
+        ${MESES.map(mes => `<td class="month-cell">${chipFor(m, mes)}</td>`).join("")}
+      </tr>
+      <tr class="detail-row ${open && dOpen ? "" : "hidden"}" data-g="${fr.id}" data-d="${m.id}"><td colspan="6"><div class="detail-inner">
+        <div class="d-item"><div class="d-label">O que é</div><div class="d-value">${esc(m.oque)}</div></div>
+        <div class="d-item"><div class="d-label">Por que importa</div><div class="d-value">${esc(m.porque)}</div></div>
+        <div class="d-item"><div class="d-label">Risco se atrasar</div><div class="d-value">${esc(m.risco)}</div></div>
+        <div class="d-item"><div class="d-label">Situação</div><div class="d-value">${SEM_LBL[semaforo(m)]} · ${ST_LBL[m.status]}</div></div>
+        <div class="d-item full-span"><div class="d-label">Avanços</div><div class="d-value">${adv.length ? `<ul>${adv.map(a => `<li><b>${fmt(a.d)}</b> · ${esc(a.t)}</li>`).join("")}</ul>` : "Nenhum avanço registrado ainda."}</div></div>
+      </div></td></tr>`;
+    });
+  });
+  tbody.innerHTML = html;
+}
+
+document.getElementById("tbody").addEventListener("click", e => {
+  const btn = e.target.closest("[data-detail]");
+  if (btn){
+    const id = btn.dataset.detail;
+    openDetails.has(id) ? openDetails.delete(id) : openDetails.add(id);
+    render(); return;
+  }
+  const g = e.target.closest("tr.group-row");
+  if (g){
+    const id = g.dataset.group;
+    if (anyFilter()) return;
+    openGroups.has(id) ? openGroups.delete(id) : openGroups.add(id);
+    render();
+  }
+});
+document.getElementById("expandAllBtn").addEventListener("click", () => { FRENTES.forEach(f => openGroups.add(f.id)); render(); });
+document.getElementById("collapseAllBtn").addEventListener("click", () => { openGroups.clear(); openDetails.clear(); render(); });
+[fFrente, fResp, fStatus].forEach(el => el.addEventListener("change", render));
+fBusca.addEventListener("input", render);
+document.getElementById("resetFilters").addEventListener("click", () => {
+  fFrente.value = ""; fResp.value = ""; fStatus.value = ""; fBusca.value = ""; render();
+});
+
+/* seções colapsáveis */
+document.querySelectorAll(".stats-section > .stats-toggle").forEach(btn => btn.addEventListener("click", () => {
+  const sec = btn.parentElement;
+  const open = sec.classList.toggle("open");
+  btn.querySelector(".stats-toggle-icon").textContent = open ? "−" : "+";
+  btn.setAttribute("aria-expanded", open);
+}));
+
+/* frentes e glossário */
+document.getElementById("frentesList").innerHTML = FRENTES.map(f => `
+  <details class="plus"><summary><span class="pm">+</span>${esc(f.nome)}</summary>
+  <div class="acc-body"><p><span class="lbl">Objetivo</span>${esc(f.why)}</p><p><span class="lbl">Por que importa</span>${esc(f.importancia)}</p><p><span class="lbl">Possíveis problemas</span>${esc(f.riscos)}</p></div></details>`).join("");
+document.getElementById("glossario").innerHTML = GLOSSARIO.map(([t,d]) => `
+  <details class="plus"><summary><span class="pm">+</span>${esc(t)}</summary><div class="acc-body"><p>${esc(d)}</p></div></details>`).join("");
+document.querySelectorAll("details.plus").forEach(d => d.addEventListener("toggle", () => { d.querySelector(".pm").textContent = d.open ? "−" : "+"; }));
+
+/* histórico */
+document.getElementById("timeline").innerHTML = [...AVANCOS].sort((a,b) => b.d.localeCompare(a.d)).map(a => `
+  <div class="tl"><span class="d">${fmtShort(a.d)}</span><div>${esc(a.t)}${a.m.length ? `<div class="refs">Metas: ${a.m.join(", ")}</div>` : ""}</div></div>`).join("");
+
+/* balão dos chips (funciona no celular) */
+const pop = document.getElementById("tapPopover"); let curChip = null;
+function showPop(el){
+  pop.textContent = el.getAttribute("title"); pop.classList.add("show");
+  const r = el.getBoundingClientRect(), p = pop.getBoundingClientRect();
+  let left = Math.max(8, Math.min(r.left + r.width/2 - p.width/2, innerWidth - p.width - 8));
+  const below = innerHeight - r.bottom > p.height + 16 || r.top < p.height + 16;
+  pop.style.left = left + "px"; pop.style.top = (below ? r.bottom + 10 : r.top - p.height - 10) + "px";
+}
+document.addEventListener("click", e => {
+  const chip = e.target.closest(".chip[title]");
+  if (chip){ if (curChip === chip){ pop.classList.remove("show"); curChip = null; } else { showPop(chip); curChip = chip; } return; }
+  if (!e.target.closest("#tapPopover")){ pop.classList.remove("show"); curChip = null; }
+});
+document.addEventListener("keydown", e => { if (e.key === "Enter" && e.target.matches(".chip[title]")) { showPop(e.target); curChip = e.target; } if (e.key === "Escape"){ pop.classList.remove("show"); curChip = null; } });
+window.addEventListener("scroll", () => { if (curChip) showPop(curChip); }, true);
+
+render();
+</script>
+</body>
+</html>
