@@ -518,13 +518,13 @@
                 <div class="ic-resp">Pedro</div>
               </div>
               <div class="ic">
-                <div class="ic-top"><span class="ic-item">2.2 · ITEM 1.5</span><span class="ic-st st-red">não iniciado</span></div>
+                <div class="ic-top"><span class="ic-item">2.2 · ITEM 1.5</span><span class="ic-st st-amber">em andamento</span></div>
                 <div class="ic-name">CADIN</div>
                 <ol class="ic-causes">
                   <li>Débitos com o <b>Conselho Regional de Farmácia do RJ</b></li>
                   <li>Notificações nº 3359 e nº 3698, de 27/07/2026</li>
                 </ol>
-                <div class="ic-way"><span>Saída</span>Quitar ou parcelar e requerer a baixa ao Conselho</div>
+                <div class="ic-way"><span>Saída</span>Quitar ou parcelar e requerer a baixa ao Conselho. Boletos em emissão junto ao Conselho (06/11).</div>
                 <div class="ic-resp">Rafael</div>
               </div>
               <div class="ic">
@@ -863,12 +863,12 @@ const METAS = [
    porque:"Sem a baixa, o CAUC continua travado mesmo com CRP e CADIN resolvidos.",
    risco:"O prazo depende do Judiciário. Uma decisão desfavorável manteria a restrição."},
 
-  {id:"D1", f:"D", t:"Identificar os débitos com o Conselho Regional de Farmácia", resp:["Rafael"], prazo:"2026-11-13", status:"aberta",
+  {id:"D1", f:"D", t:"Identificar os débitos com o Conselho Regional de Farmácia", resp:["Rafael"], prazo:"2026-11-13", status:"andamento",
    entrega:"Origem e valor das notificações nº 3359 e nº 3698",
    oque:"Descobrir a que se referem as duas notificações de 27/07/2026.",
    porque:"Em geral são anuidades ou multas por falta de farmacêutico responsável em alguma unidade.",
    risco:"Pagar sem entender a causa e receber novas notificações."},
-  {id:"D2", f:"D", t:"Quitar ou parcelar e pedir a baixa no CADIN", resp:["Rafael"], prazo:"2026-11-27", status:"aberta",
+  {id:"D2", f:"D", t:"Quitar ou parcelar e pedir a baixa no CADIN", resp:["Rafael"], prazo:"2026-11-27", status:"andamento",
    entrega:"Item 1.5 comprovado no CAUC",
    oque:"Pagar ou parcelar e solicitar ao Conselho a retirada do registro.",
    porque:"Provavelmente é a pendência mais simples e rápida do CAUC.",
@@ -881,6 +881,7 @@ const METAS = [
 ];
 
 const AVANCOS = [
+  {d:"2026-11-06", t:"Elias Roguete informou que estão sendo providenciados junto ao Conselho Regional de Farmácia os boletos para pagamento dos débitos do CADIN.", m:["D1","D2"]},
   {d:"2026-11-06", t:"A Secretaria de Fazenda esclareceu que o COMPREV e o balancete do PREVI são de responsabilidade do Juarez, pois o PREVI é autarquia com contabilidade própria; a Secretaria acompanha e cobra, mas não tem acesso pleno ao sistema. Informou que pretende encerrar o exercício em 10/12/2026 e que há lançamentos do PREVI pendentes, o que preocupa para a prestação de contas.", m:["C1","C5","C6"]},
   {d:"2026-11-06", t:"Assessoria do deputado André Corrêa informou que a adesão à RJPrev não tem custo para o município e conta com pareceres do TCE e da PGE sem restrições. Sugeriu avaliar a inclusão dos cargos eletivos no plano, sem contribuição patronal, como ocorreu em outros municípios com boa adesão.", m:["R4"]},
   {d:"2026-11-05", t:"Pedro informou que a juíza do departamento de precatórios do TJRJ já expediu dois ofícios ao Tesouro pedindo a retirada da restrição de 2024, sem resultado. Em 31/12/2025 ele ajuizou ação cautelar na Justiça Federal: a liminar salvou o recurso de uma emenda, mas o pedido de exclusão da restrição aguarda julgamento de mérito. Já despachou com o juiz.", m:["P2","P3"]},
