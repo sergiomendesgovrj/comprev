@@ -602,8 +602,8 @@
         <details class="plus"><summary><span class="pm">+</span>5. Os atores envolvidos</summary>
         <div class="acc-body">
           <ul class="actors">
-            <li><b>Prefeitura Municipal de Valença.</b> O Prefeito assina como representante legal do ente. A Secretaria de Fazenda, sob a titular Denise, coordena o grupo de trabalho e responde pela contabilidade e pela ordenação de despesas.</li>
-            <li><b>PREVI Valença.</b> Juarez é o representante do RPPS e opera os sistemas COMPREV e CADPREV.</li>
+            <li><b>Prefeitura Municipal de Valença.</b> O Prefeito assina como representante legal do ente. A Secretaria de Fazenda, sob a titular Denise, coordena o grupo de trabalho, responde pela ordenação de despesas e pelo encerramento do exercício, previsto para 10/12/2026.</li>
+            <li><b>PREVI Valença.</b> Autarquia com contabilidade própria. Juarez é o representante do RPPS, opera os sistemas COMPREV e CADPREV e responde pelo balancete do instituto.</li>
             <li><b>Procuradoria do Município.</b> Pedro, procurador, conduz a questão dos precatórios. Leonardo responde pela redação dos projetos de lei.</li>
             <li><b>Atuário.</b> Responsável pelo cálculo do déficit atuarial e dos aportes.</li>
             <li><b>Câmara Municipal.</b> Aprova as leis de parcelamento e de aportes. Dudu acompanha a tramitação.</li>
@@ -627,7 +627,7 @@
             <div class="tl"><span class="d">15/10/26</span><div>Informação inicial de cerca de R$ 24 milhões a receber do COMPREV e de grande volume de requerimentos com exigências.</div></div>
             <div class="tl"><span class="d">19/10/26</span><div>Levantamento no COMPREV aponta R$ 25.530.499,47 a receber. Constata-se que a Mensagem nº 100/2026 tem objeto incorreto: o débito decorre de aporte não repassado, e não de contribuição patronal. A tramitação é suspensa e o grupo estabelece que nenhuma lei previdenciária seguirá à Câmara sem sua revisão. São apontados dois termos de parcelamento pendentes no Ministério.</div></div>
             <div class="tl"><span class="d">05/11/26</span><div>O extrato do CAUC confirma três pendências e a Secretaria de Fazenda designa os responsáveis. O pedido de CRP emergencial é preparado e a documentação da RJPrev é recebida, ambos dependentes da assinatura do Prefeito. A Procuradoria relata o andamento judicial dos precatórios.</div></div>
-            <div class="tl"><span class="d">06/11/26</span><div>Informa-se que a adesão à RJPrev não tem custo e conta com pareceres favoráveis do TCE e da PGE. Surge a sugestão de incluir os cargos eletivos no plano, sem contribuição patronal.</div></div>
+            <div class="tl"><span class="d">06/11/26</span><div>Informa-se que a adesão à RJPrev não tem custo e conta com pareceres favoráveis do TCE e da PGE. Surge a sugestão de incluir os cargos eletivos no plano, sem contribuição patronal. A Secretaria de Fazenda esclarece que o COMPREV e o balancete do PREVI cabem ao instituto e alerta para lançamentos pendentes antes do encerramento do exercício, previsto para 10/12/2026.</div></div>
           </div>
         </div></details>
 
@@ -707,7 +707,8 @@
             <li><b>Novas pendências.</b> Atrasos em renovações de rotina (FGTS, relatórios fiscais) ou nos depósitos de precatórios podem gerar restrições novas.</li>
             <li><b>Erros normativos.</b> Leis com objeto ou valores incorretos geram passivo jurídico e retardam a regularização.</li>
             <li><b>Perda de créditos.</b> Requerimentos de compensação sem resposta podem ser indeferidos.</li>
-            <li><b>Concentração de conhecimento.</b> A operação dos sistemas previdenciários depende de uma única pessoa.</li>
+            <li><b>Concentração de conhecimento.</b> A operação dos sistemas previdenciários e o acesso a eles dependem de uma única pessoa; a própria Secretaria de Fazenda não tem acesso pleno.</li>
+            <li><b>Prestação de contas.</b> Lançamentos pendentes no balancete do PREVI podem impedir o encerramento do exercício em 10/12/2026.</li>
           </ul>
         </div></details>
 
@@ -744,8 +745,8 @@
 const ATUALIZADO = "06/11/2026";
 
 const PESSOAS = {
-  "Denise":       "Secretária de Fazenda · coordenação geral e contabilidade",
-  "Juarez":       "PREVI Valença · COMPREV, CADPREV e CRP",
+  "Denise":       "Secretária de Fazenda · coordenação geral",
+  "Juarez":       "PREVI Valença (autarquia) · COMPREV, CADPREV, CRP e balancete",
   "Atuário":      "Cálculo atuarial do PREVI",
   "Procuradoria": "Leonardo (redação e parecer) · Dudu acompanha na Câmara",
   "Pedro":        "Procurador do Município · precatórios",
@@ -754,7 +755,7 @@ const PESSOAS = {
 
 /* Árvore de entregas: cada nó lista as metas próprias e os subitens */
 const NODES = [
-  {id:"1", nome:"Recuperar R$ 25 milhões em créditos do COMPREV", metas:["C1","C2","C3","C4","C5"]},
+  {id:"1", nome:"Recuperar R$ 25 milhões em créditos do COMPREV", metas:["C1","C2","C3","C4","C5","C6"]},
   {id:"2", nome:"Retirar o Município do CAUC até dezembro/2026", metas:[], children:[
     {id:"2.1", nome:"Precatórios", metas:["P1","P2","P3"]},
     {id:"2.2", nome:"CADIN", metas:["D1","D2","D3"]},
@@ -768,9 +769,9 @@ const NODES = [
 ];
 
 const METAS = [
-  {id:"C1", f:"C", t:"Confirmar no balancete se o fluxo mensal do COMPREV já está entrando", resp:["Denise"], prazo:"2026-11-14", status:"aberta",
-   entrega:"Receitas do COMPREV em 2026, mês a mês",
-   oque:"Verificar na contabilidade se os R$ 537,7 mil mensais já são recebidos pelo PREVI.",
+  {id:"C1", f:"C", t:"Confirmar no balancete do PREVI se o fluxo mensal do COMPREV já está entrando", resp:["Juarez"], prazo:"2026-11-14", status:"aberta",
+   entrega:"Receitas do COMPREV em 2026, mês a mês, lançadas no balancete do PREVI",
+   oque:"Verificar na contabilidade do PREVI, que é autarquia com contabilidade própria, se os R$ 537,7 mil mensais já são recebidos e estão lançados. A Secretaria de Fazenda acompanha, mas não opera o sistema.",
    porque:"Se já entram, não são receita nova. Isso muda a conta de quanto o trabalho pode trazer de fato.",
    risco:"Contar duas vezes o mesmo dinheiro no planejamento."},
   {id:"C2", f:"C", t:"Levantar os requerimentos com exigência", resp:["Juarez"], prazo:"2026-11-20", status:"aberta",
@@ -788,11 +789,16 @@ const METAS = [
    oque:"Atacar primeiro as exigências que destravam mais dinheiro ou são mais fáceis de resolver.",
    porque:"Cada exigência respondida entra na fila de análise e passa a gerar atrasados e fluxo mensal.",
    risco:"Mais estoque parado e mais risco de indeferimento."},
-  {id:"C5", f:"C", t:"Criar a rotina permanente de recuperação do COMPREV", resp:["Denise","Juarez"], prazo:"2026-12-31", status:"aberta",
-   entrega:"Equipe designada, procedimento escrito e relatório mensal",
-   oque:"Definir quem opera o COMPREV, com que frequência e como presta contas.",
+  {id:"C5", f:"C", t:"Criar a rotina permanente de recuperação do COMPREV", resp:["Juarez"], prazo:"2026-12-31", status:"aberta",
+   entrega:"Equipe designada, com pelo menos um operador substituto, procedimento escrito e relatório mensal à Secretaria de Fazenda",
+   oque:"Definir quem opera o COMPREV no PREVI, quem substitui o titular, com que frequência e como presta contas à Secretaria de Fazenda.",
    porque:"Com rotina, as boladas acumuladas deixam de existir e viram fluxo mensal que ajuda a pagar a folha da previdência.",
    risco:"Dependência de uma só pessoa."},
+  {id:"C6", f:"C", t:"Regularizar os lançamentos do balancete do PREVI para o encerramento do exercício", resp:["Juarez"], prazo:"2026-12-04", status:"aberta",
+   entrega:"Balancete do PREVI de 2026 completo, permitindo o encerramento do exercício em 10/12/2026",
+   oque:"Concluir os lançamentos pendentes do PREVI, inclusive as receitas do COMPREV, antes do fechamento do exercício pretendido pela Secretaria de Fazenda para 10/12/2026.",
+   porque:"O PREVI é autarquia e sua contabilidade integra a prestação de contas do Município. Lançamentos pendentes impedem o encerramento do exercício.",
+   risco:"Atraso no encerramento do exercício e apontamentos na prestação de contas."},
 
   {id:"A1", f:"A", t:"Levantar valores devidos ao PREVI e obrigações futuras", resp:["Atuário"], prazo:"2026-11-20", status:"aberta",
    entrega:"Documento escrito com valores por exercício e aportes previstos no cálculo atuarial",
@@ -875,6 +881,7 @@ const METAS = [
 ];
 
 const AVANCOS = [
+  {d:"2026-11-06", t:"A Secretaria de Fazenda esclareceu que o COMPREV e o balancete do PREVI são de responsabilidade do Juarez, pois o PREVI é autarquia com contabilidade própria; a Secretaria acompanha e cobra, mas não tem acesso pleno ao sistema. Informou que pretende encerrar o exercício em 10/12/2026 e que há lançamentos do PREVI pendentes, o que preocupa para a prestação de contas.", m:["C1","C5","C6"]},
   {d:"2026-11-06", t:"Assessoria do deputado André Corrêa informou que a adesão à RJPrev não tem custo para o município e conta com pareceres do TCE e da PGE sem restrições. Sugeriu avaliar a inclusão dos cargos eletivos no plano, sem contribuição patronal, como ocorreu em outros municípios com boa adesão.", m:["R4"]},
   {d:"2026-11-05", t:"Pedro informou que a juíza do departamento de precatórios do TJRJ já expediu dois ofícios ao Tesouro pedindo a retirada da restrição de 2024, sem resultado. Em 31/12/2025 ele ajuizou ação cautelar na Justiça Federal: a liminar salvou o recurso de uma emenda, mas o pedido de exclusão da restrição aguarda julgamento de mérito. Já despachou com o juiz.", m:["P2","P3"]},
   {d:"2026-11-05", t:"Esclarecidas as assinaturas exigidas pelo Ministério: no CRP emergencial, prefeito (representante do ente) e Juarez (representante do RPPS); nos termos de parcelamento, também a Denise (ordenadora de despesa). Para tirar o prefeito das assinaturas, seria preciso alteração cadastral aprovada pelo Ministério.", m:["R2","A2","A3"]},
