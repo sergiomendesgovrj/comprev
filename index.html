@@ -758,7 +758,7 @@ const NODES = [
     {id:"1.1", nome:"279 requerimentos aguardando análise do INSS (≈ R$ 25 mi)", metas:["C3"]},
     {id:"1.2", nome:"77 requerimentos aguardando análise médica", metas:["C7","C8"]},
     {id:"1.3", nome:"Pendências do PREVI: exigências e requerimentos a analisar", metas:["C2","C4","C9"]},
-    {id:"1.4", nome:"221 requerimentos em compensação: recebimentos", metas:["C12","C13","C10","C11","C6"]}
+    {id:"1.4", nome:"221 requerimentos em compensação: recebimentos", metas:["C12","C10","C11","C6"]}
   ]},
   {id:"2", nome:"Retirar o Município do CAUC até dezembro/2026", metas:[], children:[
     {id:"2.1", nome:"Precatórios", metas:["P2","P3"]},
@@ -801,15 +801,11 @@ const METAS = [
    oque:"São pessoas que levaram tempo de contribuição do regime próprio de Valença e se aposentaram pelo INSS. Nesses casos, Valença deve compensar o INSS. Cabe ao PREVI analisar e conceder.",
    porque:"É obrigação do Município. Os valores são abatidos do que o INSS repassa a Valença, já que o INSS deve mais.",
    risco:"Pendências do Município no sistema e possível retenção de repasses."},
-  {id:"C12", f:"C", t:"Fluxo mensal de novembro recebido (≈ R$ 121 mil, dia 5)", resp:["Juarez"], prazo:"2026-11-05", status:"concluida",
-   entrega:"Crédito do fluxo mensal confirmado na conta do PREVI",
-   oque:"Os 221 requerimentos em compensação geram um fluxo mensal de cerca de R$ 121 mil, creditado todo dia 5. O crédito de novembro foi confirmado.",
+  {id:"C12", f:"C", t:"Fluxo mensal recebido (≈ R$ 121 mil, todo dia 5)", resp:["Juarez"], prazoTxt:"Todo dia 5",
+   mensal:{10:{prazo:"2026-11-05", status:"concluida"}, 11:{prazo:"2026-12-05", status:"aberta"}},
+   entrega:"Crédito do fluxo mensal confirmado na conta do PREVI a cada mês",
+   oque:"Os 221 requerimentos em compensação geram um fluxo mensal de cerca de R$ 121 mil, creditado todo dia 5. Novembro: recebido. Dezembro: previsto para 05/12, adicional aos R$ 574.977,21 esperados no mesmo mês.",
    porque:"A conferência mensal identifica de imediato qualquer interrupção, como a dos últimos meses.",
-   risco:"Interrupção do repasse sem que ninguém perceba."},
-  {id:"C13", f:"C", t:"Fluxo mensal de dezembro recebido (≈ R$ 121 mil, dia 5)", resp:["Juarez"], prazo:"2026-12-05", status:"aberta",
-   entrega:"Crédito do fluxo mensal confirmado na conta do PREVI",
-   oque:"Confirmar o crédito do fluxo mensal de dezembro, previsto para o dia 5. Esse valor é adicional aos R$ 574.977,21 esperados no mesmo mês.",
-   porque:"A conferência mensal identifica de imediato qualquer interrupção.",
    risco:"Interrupção do repasse sem que ninguém perceba."},
   {id:"C10", f:"C", t:"Confirmar o crédito de R$ 1.038.959,31 desbloqueado", resp:["Juarez"], prazo:"2026-11-13", status:"andamento",
    entrega:"Crédito confirmado no extrato bancário do PREVI e lançado no balancete",
@@ -878,7 +874,7 @@ const METAS = [
 ];
 
 const AVANCOS = [
-  {d:"2026-11-09", t:"Confirmado o crédito do fluxo mensal de novembro, de cerca de R$ 121 mil, que cai todo dia 5. Os R$ 574.977,21 esperados em dezembro são adicionais ao fluxo.", m:["C12","C13","C11"]},
+  {d:"2026-11-09", t:"Confirmado o crédito do fluxo mensal de novembro, de cerca de R$ 121 mil, que cai todo dia 5. Os R$ 574.977,21 esperados em dezembro são adicionais ao fluxo.", m:["C12","C11"]},
   {d:"2026-11-09", t:"Reunião com o Edmilson (PREVI): os R$ 25 mi correspondem aos 279 requerimentos enviados por Valença e aguardando análise do INSS, sem pendência do Município. Outros 77, de aposentadoria por invalidez, aguardam análise médica e dependem da nomeação de perito. Os 221 em compensação geram o fluxo: R$ 1.038.959,31 desbloqueados, com entrada prevista para 09/11, e R$ 574.977,21 esperados em dezembro. Há 10 requerimentos em que Valença é regime de origem, a serem analisados pelo PREVI.", m:["C3","C7","C8","C9","C10","C11"]},
   {d:"2026-11-09", t:"Reunião com o Juarez (CRP): o pedido de CRP emergencial já foi protocolado no Gescon e o Ministério acusou o recebimento; o primeiro emergencial saiu em três dias. As pendências restantes servem ao CRP definitivo, em cerca de seis meses: correção, pelo Ministério, dos valores de duas contribuições da Câmara (março e abril) no termo de parcelamento, e adesão à previdência complementar, que exige alterar a Lei nº 236 para dispensar processo seletivo.", m:["R2","R3","A2","R4","R5"]},
   {d:"2026-11-09", t:"Reunião com o Juarez (COMPREV): os R$ 25,5 mi correspondem a créditos já desembaraçados, sem estoque. O INSS repassa normalmente entre R$ 200 mil e R$ 400 mil por mês, mas o PREVI está há cerca de três meses sem receber. O Juarez enviará até 10/11 o relatório de exigências.", m:["C2","C3","C4"]},
@@ -910,7 +906,17 @@ const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt
 const MESES = [{key:"nov", m:10}, {key:"dez", m:11}];
 const META_BY_ID = Object.fromEntries(METAS.map(m => [m.id, m]));
 
+function occ(meta, mIdx){
+  if (meta.mensal){ const o = meta.mensal[mIdx]; return o ? Object.assign({}, meta, {prazo:o.prazo, status:o.status, mensal:null}) : null; }
+  if (!meta.prazo || parse(meta.prazo).getMonth() === mIdx) return meta;
+  return null;
+}
 function semaforo(meta){
+  if (meta.mensal){
+    const ks = Object.keys(meta.mensal).sort((a,b) => a - b);
+    const pend = ks.map(k => occ(meta, +k)).find(o => o.status !== "concluida");
+    return pend ? semaforo(pend) : "green";
+  }
   if (meta.status === "concluida" || meta.status === "vigente") return "green";
   if (meta.alerta) return "amber"; /* use alerta:true para forçar âmbar */
   if (meta.prazo){
@@ -925,9 +931,10 @@ const ST_LBL = {concluida:"concluída", andamento:"em andamento", aberta:"não i
 const advFor = id => AVANCOS.filter(a => a.m.includes(id)).sort((a,b) => b.d.localeCompare(a.d));
 
 function chipFor(meta, mes){
+  const o = occ(meta, mes.m);
+  if (o && o !== meta) meta = o;
   const st = semaforo(meta);
-  const inMonth = meta.prazo ? parse(meta.prazo).getMonth() === mes.m : true;
-  if (!inMonth) return `<span class="chip gray na"><span class="main">—</span><span class="sub">sem entrega</span></span>`;
+  if (!o) return `<span class="chip gray na"><span class="main">—</span><span class="sub">sem entrega</span></span>`;
   const main = st === "green" ? "✓" : (meta.status === "andamento" ? "◐" : "—");
   const sub = !meta.prazo ? "vigente" : (st !== "green" && parse(meta.prazo) < HOJE ? "atrasada" : `até ${fmtShort(meta.prazo)}`);
   const last = advFor(meta.id)[0];
@@ -936,7 +943,7 @@ function chipFor(meta, mes){
   return `<span class="chip ${st}" title="${esc(tt)}" tabindex="0"><span class="main">${main}</span><span class="sub">${sub}</span></span>`;
 }
 function aggregate(list, mes){
-  const app = list.filter(r => !r.prazo || parse(r.prazo).getMonth() === mes.m).map(semaforo);
+  const app = list.map(r => occ(r, mes.m)).filter(Boolean).map(semaforo);
   if (!app.length) return "na";
   if (app.includes("red")) return "red";
   if (app.includes("amber")) return "amber";
@@ -989,14 +996,14 @@ function metaRows(m, anc){
     <td class="col-x"><button type="button" class="expand-btn" data-detail="${m.id}" aria-label="Ver explicação da meta ${m.id}" aria-expanded="false">+</button></td>
     <td class="col-resp">${esc(m.resp.join(" e "))}<small>${esc(PESSOAS[m.resp[0]].split(" · ")[0])}</small></td>
     <td class="col-meta"><span class="meta-id">${m.id}</span><span class="indicador-text">${esc(m.t)}</span><span class="entrega-text">Entrega: ${esc(m.entrega)}</span></td>
-    <td class="col-prazo">${fmt(m.prazo)}</td>
+    <td class="col-prazo">${m.prazoTxt || fmt(m.prazo)}</td>
     ${MESES.map(mes => `<td class="month-cell">${chipFor(m, mes)}</td>`).join("")}
   </tr>
   <tr class="detail-row" data-anc="${anc.join("|")}" data-detail-row="${m.id}"><td colspan="6"><div class="detail-inner">
     <div class="d-item"><div class="d-label">O que é</div><div class="d-value">${esc(m.oque)}</div></div>
     <div class="d-item"><div class="d-label">Por que importa</div><div class="d-value">${esc(m.porque)}</div></div>
     <div class="d-item"><div class="d-label">Risco se atrasar</div><div class="d-value">${esc(m.risco)}</div></div>
-    <div class="d-item"><div class="d-label">Situação</div><div class="d-value">${SEM_LBL[semaforo(m)]} · ${ST_LBL[m.status]}</div></div>
+    <div class="d-item"><div class="d-label">Situação</div><div class="d-value">${SEM_LBL[semaforo(m)]} · ${ST_LBL[m.status] || "acompanhamento mensal"}</div></div>
     <div class="d-item full-span"><div class="d-label">Avanços</div><div class="d-value">${adv.length ? `<ul>${adv.map(a => `<li><b>${fmt(a.d)}</b> · ${esc(a.t)}</li>`).join("")}</ul>` : "Nenhum avanço registrado ainda."}</div></div>
   </div></td></tr>`;
 }
