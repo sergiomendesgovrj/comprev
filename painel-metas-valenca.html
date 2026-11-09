@@ -525,7 +525,7 @@
                   <li>6 débitos em 5 unidades de saúde: <b>R$ 47.639,32</b> atualizados em 06/11</li>
                 </ol>
                 <div class="ic-way"><span>Saída</span>Pagar pela Secretaria de Saúde e requerer a baixa ao Conselho</div>
-                <div class="ic-resp">Elias</div>
+                <div class="ic-resp">Luiz Arthur</div>
               </div>
               <div class="ic">
                 <div class="ic-top"><span class="ic-item">2.3 · ITEM 4.2</span><span class="ic-st st-amber">aguardando o Ministério</span></div>
@@ -749,7 +749,7 @@ const PESSOAS = {
   "Atuário":      "Cálculo atuarial do PREVI",
   "Procuradoria": "Leonardo (redação e parecer) · Dudu acompanha na Câmara",
   "Pedro":        "Procurador do Município · precatórios",
-  "Elias":        "Pendência do CADIN (Conselho de Farmácia)"
+  "Luiz Arthur":  "Pendência do CADIN (Conselho de Farmácia)"
 };
 
 /* Árvore de entregas: cada nó lista as metas próprias e os subitens */
@@ -834,12 +834,12 @@ const METAS = [
    porque:"É o caminho alternativo caso a via administrativa não funcione.",
    risco:"A tramitação deve demorar e tende a ultrapassar dezembro de 2026."},
 
-  {id:"D1", f:"D", t:"Identificar os débitos com o Conselho Regional de Farmácia", resp:["Elias"], prazo:"2026-11-13", status:"concluida",
+  {id:"D1", f:"D", t:"Identificar os débitos com o Conselho Regional de Farmácia", resp:["Luiz Arthur"], prazo:"2026-11-13", status:"concluida",
    entrega:"Relatório do CRF-RJ de 06/11/2026: 6 débitos em 5 unidades de saúde, R$ 31.199,49 originais e R$ 47.639,32 atualizados",
    oque:"Os débitos referem-se a multas e autos de infração entre 2017 e 2025, em Pronto Socorro Psiquiátrico, Central de Abastecimento, Casa da Saúde Coletiva, ESF Santa Isabel e ESF de Valença.",
    porque:"Permite emitir as guias e pagar.",
    risco:"Pagamento parcial pode não retirar o Município do CADIN."},
-  {id:"D2", f:"D", t:"Pagar os débitos e pedir a baixa no CADIN", resp:["Elias"], prazo:"2026-11-27", status:"andamento",
+  {id:"D2", f:"D", t:"Pagar os débitos e pedir a baixa no CADIN", resp:["Luiz Arthur"], prazo:"2026-11-27", status:"andamento",
    entrega:"Débitos quitados, baixa solicitada ao CRF-RJ e item 1.5 comprovado no CAUC",
    oque:"A Secretaria de Saúde abre o processo, o Prefeito autoriza e segue-se empenho, liquidação e pagamento dos R$ 47.639,32 (valor atualizado em 06/11). Depois, solicitar formalmente ao Conselho a retirada do registro e conferir o extrato do CAUC.",
    porque:"É a pendência mais simples do CAUC e depende apenas do Município.",
@@ -874,6 +874,7 @@ const METAS = [
 ];
 
 const AVANCOS = [
+  {d:"2026-11-09", t:"A frente do CADIN passou a ser conduzida por Luiz Arthur.", m:["D1","D2"]},
   {d:"2026-11-09", t:"Aberto na Secretaria de Saúde o processo SEI nº VLC-020508/002027/2026 para o pagamento dos débitos com o CRF-RJ, já instruído com os 6 boletos.", m:["D2"]},
   {d:"2026-11-09", t:"Confirmado o crédito do fluxo mensal de novembro, de cerca de R$ 121 mil, que cai todo dia 5. Os R$ 574.977,21 esperados em dezembro são adicionais ao fluxo.", m:["C12","C11"]},
   {d:"2026-11-09", t:"Reunião com o Edmilson (PREVI): os R$ 25 mi correspondem aos 279 requerimentos enviados por Valença e aguardando análise do INSS, sem pendência do Município. Outros 77, de aposentadoria por invalidez, aguardam análise médica e dependem da nomeação de perito. Os 221 em compensação geram o fluxo: R$ 1.038.959,31 desbloqueados, com entrada prevista para 09/11, e R$ 574.977,21 esperados em dezembro. Há 10 requerimentos em que Valença é regime de origem, a serem analisados pelo PREVI.", m:["C3","C7","C8","C9","C10","C11"]},
