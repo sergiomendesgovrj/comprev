@@ -565,6 +565,10 @@
           <p>As metas estão organizadas de forma hierárquica, de modo que cada pergunta encontra resposta no nível seguinte. O que falta para retirar o Município do CAUC? Precatórios, CADIN e CRP. E o CRP? No curto prazo, a emissão emergencial, já requerida, basta para o CAUC. Os itens 2.3.1 e 2.3.2 não condicionam o emergencial: são as condições para o CRP definitivo, a ser obtido em cerca de seis meses, quando o emergencial vencer.</p>
           <div class="tree">
             <div class="t1"><span>1</span>Recuperar R$ 25 milhões em créditos do COMPREV</div>
+            <div class="t2"><span>1.1</span>279 requerimentos aguardando análise do INSS (≈ R$ 25 mi)</div>
+            <div class="t2"><span>1.2</span>77 requerimentos aguardando análise médica</div>
+            <div class="t2"><span>1.3</span>Pendências do PREVI: exigências e requerimentos a analisar</div>
+            <div class="t2"><span>1.4</span>221 requerimentos em compensação: recebimentos</div>
             <div class="t1"><span>2</span>Retirar o Município do CAUC até dezembro/2026</div>
             <div class="t2"><span>2.1</span>Precatórios</div>
             <div class="t2"><span>2.2</span>CADIN</div>
@@ -640,8 +644,8 @@
             <tr><td>Estoque (benefícios anteriores a 1999)</td><td class="n">R$ 0,00</td></tr>
             <tr class="tot"><td>Total</td><td class="n">R$ 25.530.499,47</td></tr>
           </tbody></table>
-          <p><span class="lbl">Situação informada pelo PREVI em 09/11/2026</span>Os R$ 25,5 milhões correspondem a créditos já desembaraçados, sem estoque. O INSS não costuma pagar o saldo de uma só vez: repassa um fluxo mensal variável, em geral entre R$ 200 mil e R$ 400 mil, e o PREVI está há cerca de três meses sem receber. Excepcionalmente, entre 2021 e 2022, houve repasse único de cerca de R$ 9 milhões. O PREVI encaminha ao INSS as concessões assim que homologadas pelo Tribunal de Contas e acompanha o sistema diariamente.</p>
-          <p><span class="lbl">Questões em aberto</span>A existência de requerimentos com exigência, objeto de relatório a ser enviado pelo PREVI, e a retomada dos repasses mensais, com algum cronograma para o saldo.</p>
+          <p><span class="lbl">Composição esclarecida em 09/11/2026</span>Segundo o PREVI, os requerimentos em que Valença é regime instituidor dividem-se em: <b>279</b> aguardando análise do INSS, sem pendência do Município, que devem gerar cerca de R$ 25 milhões; <b>77</b> aguardando análise médica, por serem aposentadorias por invalidez, que dependem da nomeação e do cadastro de um médico perito no COMPREV e, depois de analisados, aumentam aquele valor; e <b>221</b> em compensação, já deferidos, que geram o fluxo mensal. Desse último grupo, R$ 1.038.959,31 foram desbloqueados, com entrada prevista para 09/11, e R$ 574.977,21 são esperados em dezembro, totalizando R$ 1.613.936,52. Há ainda <b>10</b> requerimentos em que Valença é regime de origem, isto é, pessoas que levaram tempo do regime próprio e se aposentaram pelo INSS: cabe ao PREVI analisá-los, e os valores devidos ao INSS são abatidos dos repasses. Existem também requerimentos com exigência, distintos dos 279.</p>
+          <p><span class="lbl">Questões em aberto</span>O prazo de análise dos 279 requerimentos pelo INSS, a nomeação do perito e o levantamento das exigências.</p>
           <p><span class="lbl">Vinculação dos recursos</span>Os valores da compensação destinam-se exclusivamente ao pagamento de benefícios previdenciários. Não custeiam outras despesas, mas reduzem a complementação do PREVI pelo Tesouro municipal.</p>
           <p><span class="lbl">Riscos</span>Indeferimento de requerimentos sem resposta; tratamento como receita certa de valores que podem ser pagos ao longo de anos; e concentração da operação dos sistemas em uma única pessoa.</p>
           <p><span class="lbl">Objetivo estrutural</span>Instituir rotina permanente de recuperação, com equipe designada, procedimento escrito e relatório mensal, para que os créditos deixem de se acumular e se convertam em fluxo regular.</p>
@@ -750,7 +754,12 @@ const PESSOAS = {
 
 /* Árvore de entregas: cada nó lista as metas próprias e os subitens */
 const NODES = [
-  {id:"1", nome:"Recuperar R$ 25 milhões em créditos do COMPREV", metas:["C2","C3","C4","C6"]},
+  {id:"1", nome:"Recuperar R$ 25 milhões em créditos do COMPREV", metas:[], children:[
+    {id:"1.1", nome:"279 requerimentos aguardando análise do INSS (≈ R$ 25 mi)", metas:["C3"]},
+    {id:"1.2", nome:"77 requerimentos aguardando análise médica", metas:["C7","C8"]},
+    {id:"1.3", nome:"Pendências do PREVI: exigências e requerimentos a analisar", metas:["C2","C4","C9"]},
+    {id:"1.4", nome:"221 requerimentos em compensação: recebimentos", metas:["C10","C11","C6"]}
+  ]},
   {id:"2", nome:"Retirar o Município do CAUC até dezembro/2026", metas:[], children:[
     {id:"2.1", nome:"Precatórios", metas:["P2","P3"]},
     {id:"2.2", nome:"CADIN", metas:["D1","D2"]},
@@ -762,21 +771,46 @@ const NODES = [
 ];
 
 const METAS = [
+  {id:"C3", f:"C", t:"Cobrar do INSS a análise dos 279 requerimentos", resp:["Juarez"], prazo:"2026-11-13", status:"andamento",
+   entrega:"Posição do Ministério da Previdência e do INSS sobre a análise dos 279 requerimentos e previsão de conclusão",
+   oque:"São 279 requerimentos enviados por Valença, sem pendência do PREVI, aguardando análise do INSS. Juntos, devem gerar cerca de R$ 25 milhões. Há possibilidade de visita presencial em Brasília na sexta-feira, 13/11, com documentos fornecidos pelo PREVI.",
+   porque:"É o grosso dos R$ 25 milhões. O PREVI já fez a sua parte; agora depende do INSS.",
+   risco:"Sem cobrança, a análise pode se arrastar e o dinheiro não entra."},
+  {id:"C7", f:"C", t:"Nomear médico perito e cadastrá-lo no COMPREV", resp:["Juarez"], prazo:"2026-11-27", status:"aberta",
+   entrega:"Perito nomeado e cadastrado no sistema COMPREV",
+   oque:"Os 77 requerimentos são de aposentadoria por invalidez e exigem análise médica. Para isso, o Município precisa nomear um médico perito e cadastrá-lo no COMPREV, para que ele acesse o sistema e dê o parecer.",
+   porque:"Sem o perito, os 77 requerimentos não avançam.",
+   risco:"Os requerimentos ficam parados indefinidamente."},
+  {id:"C8", f:"C", t:"Concluir a análise médica dos 77 requerimentos", resp:["Juarez"], prazo:"2026-12-18", status:"aberta",
+   entrega:"77 requerimentos com parecer médico, movidos para aguardando análise do INSS",
+   oque:"Com o parecer do perito, os requerimentos passam para aguardando análise e somam-se aos 279.",
+   porque:"Aumenta o valor a recuperar, hoje estimado em cerca de R$ 25 milhões.",
+   risco:"Créditos que deixam de ser requeridos."},
   {id:"C2", f:"C", t:"Levantar os requerimentos com exigência", resp:["Juarez"], prazo:"2026-11-10", status:"andamento",
-   entrega:"Relatório com as exigências existentes, o motivo e o tipo de benefício (invalidez, tempo de contribuição etc.)",
-   oque:"Verificar no sistema COMPREV se há requerimentos devolvidos pelo INSS com exigência e quais são. O Juarez comprometeu-se a enviar o relatório na reunião de 09/11.",
-   porque:"Segundo o Juarez, os R$ 25,5 mi já correspondem a créditos desembaraçados. O levantamento confirma se há valores adicionais parados por exigência.",
-   risco:"Exigências sem resposta podem levar ao indeferimento do requerimento."},
-  {id:"C3", f:"C", t:"Cobrar do INSS a retomada dos repasses e o cronograma do saldo", resp:["Juarez"], prazo:"2026-11-13", status:"andamento",
-   entrega:"Posição do Ministério da Previdência e do INSS sobre os repasses suspensos e sobre o ritmo de pagamento dos R$ 25,5 mi",
-   oque:"O PREVI está há cerca de três meses sem receber repasses do COMPREV. Cobrar a retomada do fluxo, normalmente entre R$ 200 mil e R$ 400 mil por mês, e um cronograma para o saldo. Há possibilidade de visita presencial em Brasília na sexta-feira, 13/11, com documentos fornecidos pelo Juarez.",
-   porque:"Os créditos estão reconhecidos, mas só se transformam em recurso para o PREVI se o INSS efetivamente pagar.",
-   risco:"Sem cobrança, o saldo pode permanecer parado indefinidamente."},
+   entrega:"Relatório com as exigências existentes, o motivo e o tipo de benefício",
+   oque:"Verificar no sistema COMPREV se há requerimentos devolvidos pelo INSS com exigência, fora dos 279, e quais são.",
+   porque:"Existem requerimentos com pendências, distintos dos que compõem os R$ 25 milhões.",
+   risco:"Exigências sem resposta podem levar ao indeferimento."},
   {id:"C4", f:"C", t:"Responder as exigências identificadas", resp:["Juarez"], prazo:"2026-12-18", status:"aberta",
    entrega:"Exigências respondidas no sistema COMPREV",
-   oque:"Corrigir ou complementar os requerimentos apontados no levantamento da meta C2, se houver.",
+   oque:"Corrigir ou complementar os requerimentos apontados no levantamento da meta C2.",
    porque:"Cada exigência respondida volta à fila de análise e pode gerar novos créditos.",
    risco:"Indeferimento de requerimentos e perda de créditos."},
+  {id:"C9", f:"C", t:"Analisar os 10 requerimentos em que Valença é regime de origem", resp:["Juarez"], prazo:"2026-12-18", status:"aberta",
+   entrega:"10 requerimentos analisados e concedidos pelo PREVI no COMPREV",
+   oque:"São pessoas que levaram tempo de contribuição do regime próprio de Valença e se aposentaram pelo INSS. Nesses casos, Valença deve compensar o INSS. Cabe ao PREVI analisar e conceder.",
+   porque:"É obrigação do Município. Os valores são abatidos do que o INSS repassa a Valença, já que o INSS deve mais.",
+   risco:"Pendências do Município no sistema e possível retenção de repasses."},
+  {id:"C10", f:"C", t:"Confirmar o crédito de R$ 1.038.959,31 desbloqueado", resp:["Juarez"], prazo:"2026-11-13", status:"andamento",
+   entrega:"Crédito confirmado no extrato bancário do PREVI e lançado no balancete",
+   oque:"Valor desbloqueado no sistema, com entrada prevista para 09/11/2026. Corresponde a repasses que estavam retidos.",
+   porque:"É o primeiro resultado concreto de recuperação a apresentar.",
+   risco:"Crédito não confirmado ou não lançado afeta o balancete do exercício."},
+  {id:"C11", f:"C", t:"Confirmar o crédito de R$ 574.977,21 da competência seguinte", resp:["Juarez"], prazo:"2026-12-15", status:"aberta",
+   entrega:"Crédito confirmado no extrato bancário do PREVI e lançado no balancete",
+   oque:"Valor de compensação previsto para dezembro. Somado ao valor desbloqueado, totaliza R$ 1.613.936,52 a receber até dezembro, gerado pelos 221 requerimentos em compensação.",
+   porque:"Comprova a regularidade do fluxo mensal.",
+   risco:"Nova interrupção dos repasses, como nos últimos meses."},
   {id:"C6", f:"C", t:"Regularizar os lançamentos do balancete do PREVI para o encerramento do exercício", resp:["Juarez"], prazo:"2026-12-04", status:"aberta",
    entrega:"Balancete do PREVI de 2026 completo, permitindo o encerramento do exercício em 10/12/2026",
    oque:"Concluir os lançamentos pendentes do PREVI, inclusive as receitas do COMPREV, antes do fechamento do exercício pretendido pela Secretaria de Fazenda para 10/12/2026.",
@@ -834,6 +868,7 @@ const METAS = [
 ];
 
 const AVANCOS = [
+  {d:"2026-11-09", t:"Reunião com o Edmilson (PREVI): os R$ 25 mi correspondem aos 279 requerimentos enviados por Valença e aguardando análise do INSS, sem pendência do Município. Outros 77, de aposentadoria por invalidez, aguardam análise médica e dependem da nomeação de perito. Os 221 em compensação geram o fluxo: R$ 1.038.959,31 desbloqueados, com entrada prevista para 09/11, e R$ 574.977,21 esperados em dezembro. Há 10 requerimentos em que Valença é regime de origem, a serem analisados pelo PREVI.", m:["C3","C7","C8","C9","C10","C11"]},
   {d:"2026-11-09", t:"Reunião com o Juarez (CRP): o pedido de CRP emergencial já foi protocolado no Gescon e o Ministério acusou o recebimento; o primeiro emergencial saiu em três dias. As pendências restantes servem ao CRP definitivo, em cerca de seis meses: correção, pelo Ministério, dos valores de duas contribuições da Câmara (março e abril) no termo de parcelamento, e adesão à previdência complementar, que exige alterar a Lei nº 236 para dispensar processo seletivo.", m:["R2","R3","A2","R4","R5"]},
   {d:"2026-11-09", t:"Reunião com o Juarez (COMPREV): os R$ 25,5 mi correspondem a créditos já desembaraçados, sem estoque. O INSS repassa normalmente entre R$ 200 mil e R$ 400 mil por mês, mas o PREVI está há cerca de três meses sem receber. O Juarez enviará até 10/11 o relatório de exigências.", m:["C2","C3","C4"]},
   {d:"2026-11-09", t:"Reunião com o Pedro (precatórios): o Município está em dia no regime especial e paga mensalmente. O Pedro enviou o despacho da Juíza Gestora de Precatórios (27/03/2025) que determina oficiar a STN; o documento, com as certidões do TJRJ, TRF2 e TRT, será levado pessoalmente à STN em Brasília. A ação na Justiça Federal aguarda a contestação da União.", m:["P2","P3"]},
