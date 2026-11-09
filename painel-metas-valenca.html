@@ -564,13 +564,13 @@
         <div class="acc-body">
           <p>As metas estão organizadas de forma hierárquica, de modo que cada pergunta encontra resposta no nível seguinte. O que falta para retirar o Município do CAUC? Precatórios, CADIN e CRP. E o CRP? No curto prazo, a emissão emergencial, já requerida, basta para o CAUC. Os itens 1.3.1 e 1.3.2 não condicionam o emergencial: são as condições para o CRP definitivo, a ser obtido em cerca de seis meses, quando o emergencial vencer.</p>
           <div class="tree">
-            <div class="t1"><span>1</span>Retirar o Município do CAUC até dezembro/2026</div>
+            <div class="t1"><span>1</span>CAUC</div>
             <div class="t2"><span>1.1</span>Precatórios</div>
             <div class="t2"><span>1.2</span>CADIN</div>
             <div class="t2"><span>1.3</span>CRP emergencial: libera o CAUC por seis meses</div>
             <div class="t3"><span>1.3.1</span>DIPR: correção dos valores do termo de parcelamento (CRP definitivo)</div>
             <div class="t3"><span>1.3.2</span>Previdência complementar: Lei nº 236, RJPrev e Previc (CRP definitivo)</div>
-            <div class="t1"><span>2</span>Recuperar R$ 25 milhões em créditos do COMPREV</div>
+            <div class="t1"><span>2</span>COMPREV</div>
             <div class="t2"><span>2.1</span>Recebimentos: 221 requerimentos em compensação</div>
             <div class="t2"><span>2.2</span>R$ 25 milhões: 279 requerimentos aguardando análise do INSS</div>
             <div class="t2"><span>2.3</span>Invalidez: 77 requerimentos aguardando análise médica</div>
@@ -754,7 +754,7 @@ const PESSOAS = {
 
 /* Árvore de entregas: cada nó lista as metas próprias e os subitens */
 const NODES = [
-  {id:"1", nome:"Retirar o Município do CAUC até dezembro/2026", metas:[], children:[
+  {id:"1", nome:"CAUC", metas:[], children:[
     {id:"1.1", nome:"Precatórios", metas:["P2","P3"]},
     {id:"1.2", nome:"CADIN", metas:["D1","D2"]},
     {id:"1.3", nome:"CRP emergencial (libera o CAUC)", metas:["R2","R3"], children:[
@@ -762,7 +762,7 @@ const NODES = [
       {id:"1.3.2", nome:"Previdência complementar (CRP definitivo)", metas:["R4","R5"]}
     ]}
   ]},
-  {id:"2", nome:"Recuperar R$ 25 milhões em créditos do COMPREV", metas:[], children:[
+  {id:"2", nome:"COMPREV", metas:[], children:[
     {id:"2.1", nome:"Recebimentos: 221 requerimentos em compensação", metas:["C12","C10","C11","C6"]},
     {id:"2.2", nome:"R$ 25 milhões: 279 requerimentos aguardando análise do INSS", metas:["C3"]},
     {id:"2.3", nome:"Invalidez: 77 requerimentos aguardando análise médica", metas:["C7","C8"]},
