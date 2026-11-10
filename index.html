@@ -392,6 +392,11 @@
   .hdr-controls{flex-wrap:nowrap !important;}
   header{padding-top:8px !important;padding-bottom:8px !important;}
   @media (max-width:620px){ .hdr-controls{flex-wrap:wrap !important;} }
+
+  /* subitens alinhados sob o nome do item principal */
+  tr.group-row.lvl-0 .grp-num{min-width:30px;}
+  tr.group-row.lvl-1 .grp-name{padding-left:63px !important;}
+  @media (max-width:640px){ tr.group-row.lvl-1 .grp-name{padding-left:63px !important;} }
 </style>
 </head>
 <body>
@@ -577,9 +582,9 @@
             <div class="t2"><span>2.1</span>DIPR: correção dos valores do termo de parcelamento</div>
             <div class="t2"><span>2.2</span>Previdência complementar: LC nº 236/2021, RJPrev e Previc</div>
             <div class="t1"><span>3</span>COMPREV</div>
-            <div class="t2"><span>3.1</span>R$ 1,6 mi a receber até dezembro</div>
-            <div class="t2"><span>3.2</span>R$ 25 mi em análise no INSS</div>
-            <div class="t2"><span>3.3</span>Invalidez: 77 requerimentos sem perícia</div>
+            <div class="t2"><span>3.1</span>R$ 1,6 mi até dezembro</div>
+            <div class="t2"><span>3.2</span>R$ 25 mi em análise</div>
+            <div class="t2"><span>3.3</span>Invalidez: 77 sem perícia</div>
             <div class="t2"><span>3.4</span>Pendências do PREVI</div>
           </div>
         </div></details>
@@ -770,9 +775,9 @@ const NODES = [
     {id:"2.2", nome:"Previdência complementar", metas:["R4","R5"]}
   ]},
   {id:"3", nome:"COMPREV", metas:[], children:[
-    {id:"3.1", nome:"R$ 1,6 mi a receber até dezembro", metas:["C12","C10","C11","C6"]},
-    {id:"3.2", nome:"R$ 25 mi em análise no INSS", metas:["C3"]},
-    {id:"3.3", nome:"Invalidez: 77 requerimentos sem perícia", metas:["C7","C8"]},
+    {id:"3.1", nome:"R$ 1,6 mi até dezembro", metas:["C12","C10","C11","C6"]},
+    {id:"3.2", nome:"R$ 25 mi em análise", metas:["C3"]},
+    {id:"3.3", nome:"Invalidez: 77 sem perícia", metas:["C7","C8"]},
     {id:"3.4", nome:"Pendências do PREVI", metas:["C2","C4","C9"]}
   ]}
 ];
