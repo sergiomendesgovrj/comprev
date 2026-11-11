@@ -397,6 +397,54 @@
   tr.group-row.lvl-0 .grp-num{min-width:30px;}
   tr.group-row.lvl-1 .grp-name{padding-left:63px !important;}
   @media (max-width:640px){ tr.group-row.lvl-1 .grp-name{padding-left:63px !important;} }
+  /* ===== Assistente de chat ===== */
+  .chat-wrap{
+    --c-bg:#ffffff; --c-border:#dde1e6; --c-text:#1f2933; --c-muted:#6b7785;
+    --c-user:#dcebff; --c-user-text:#10335e; --c-bot:#f0f2f4; --c-bot-text:#1f2933; --c-label:#0f2438;
+    --c-input:#ffffff; --c-accent:#2f7bda;
+    margin-top:16px;background:var(--c-bg);border:1px solid var(--c-border);border-radius:16px;padding:16px;
+    display:flex;flex-direction:column;gap:10px;color:var(--c-text);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]) .chat-wrap{
+      --c-bg:#162226; --c-border:#2a3a3f; --c-text:#e3ecee; --c-muted:#9aaeb3;
+      --c-user:#1d3a5c; --c-user-text:#e3eefb; --c-bot:#223035; --c-bot-text:#e3ecee; --c-label:#8fc3ff;
+      --c-input:#0f1719; --c-accent:#6fa8ff; color-scheme:dark;
+    }
+  }
+  :root[data-theme="dark"] .chat-wrap{
+    --c-bg:#162226; --c-border:#2a3a3f; --c-text:#e3ecee; --c-muted:#9aaeb3;
+    --c-user:#1d3a5c; --c-user-text:#e3eefb; --c-bot:#223035; --c-bot-text:#e3ecee; --c-label:#8fc3ff;
+    --c-input:#0f1719; --c-accent:#6fa8ff; color-scheme:dark;
+  }
+  .chat-head{display:flex;justify-content:space-between;align-items:center;gap:10px;}
+  .chat-head h2{margin:0;font-size:17px;font-weight:700;color:var(--c-label);letter-spacing:.2px;}
+  .chat-sub{margin:0;font-size:12.5px;color:var(--c-muted);}
+  .chat-link{background:none;border:none;color:var(--c-muted);font:inherit;font-size:12px;text-decoration:underline;text-underline-offset:2px;cursor:pointer;padding:4px;}
+  .chat-link:hover{color:var(--c-text);}
+  .chat-log{max-height:420px;min-height:120px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding:8px 4px;border-top:1px solid var(--c-border);border-bottom:1px solid var(--c-border);-webkit-overflow-scrolling:touch;}
+  .chat-empty{margin:auto;color:var(--c-muted);font-size:12.5px;text-align:center;}
+  .msg{max-width:82%;padding:9px 12px;border-radius:14px;font-size:13.5px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;}
+  .msg.user{align-self:flex-end;background:var(--c-user);color:var(--c-user-text);border-bottom-right-radius:4px;}
+  .msg.bot{align-self:flex-start;background:var(--c-bot);color:var(--c-bot-text);border-bottom-left-radius:4px;}
+  .msg.bot .who{display:block;font-size:11px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--c-label);margin-bottom:3px;}
+  .msg.thinking .txt{font-style:italic;color:var(--c-muted);}
+  .msg.err .txt{color:#c22b3a;}
+  .chat-form{display:flex;gap:8px;align-items:flex-end;}
+  .chat-form textarea{flex:1;resize:none;min-height:42px;max-height:140px;padding:10px 12px;border:1px solid var(--c-border);border-radius:12px;background:var(--c-input);color:var(--c-text);font:inherit;font-size:14px;line-height:1.4;}
+  .chat-form textarea:focus{outline:2px solid var(--c-accent);outline-offset:1px;}
+  .chat-icon{flex:0 0 42px;height:42px;border-radius:12px;border:1px solid var(--c-border);background:var(--c-input);color:var(--c-text);font-size:17px;cursor:pointer;display:grid;place-items:center;}
+  .chat-icon[hidden]{display:none;}
+  .chat-send{background:var(--c-accent);border-color:var(--c-accent);color:#fff;}
+  .chat-icon:disabled{opacity:.5;cursor:default;}
+  .chat-icon.listening{background:#c22b3a;border-color:#c22b3a;color:#fff;animation:pulse 1.2s infinite;}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+  @media (prefers-reduced-motion:reduce){.chat-icon.listening{animation:none;}}
+  .chat-key{display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--c-muted);}
+  .chat-key[hidden]{display:none;}
+  .chat-key-row{display:flex;gap:6px;}
+  .chat-key-row input{flex:1;padding:8px 10px;border:1px solid var(--c-border);border-radius:8px;background:var(--c-input);color:var(--c-text);font:inherit;}
+  .chat-key-row button{padding:8px 14px;border-radius:8px;border:1px solid var(--c-accent);background:var(--c-accent);color:#fff;font:inherit;cursor:pointer;}
 </style>
 </head>
 <body>
@@ -745,6 +793,25 @@
       </div>
     </div>
   </div>
+
+  <!-- ================= ASSISTENTE ================= -->
+  <section class="chat-wrap" id="chatSection" aria-labelledby="chatTitle">
+    <div class="chat-head">
+      <h2 id="chatTitle">ASSISTENTE</h2>
+      <button type="button" id="chatClear" class="chat-link">Limpar conversa</button>
+    </div>
+    <p class="chat-sub">Pergunte sobre as metas, os prazos ou a situação de cada item. Ex.: "o que está atrasado?" ou "mostre as metas do Juarez".</p>
+    <div class="chat-key" id="chatKeyBox" hidden>
+      <label for="chatKey">Chave da API Anthropic (fica salva só neste navegador)</label>
+      <div class="chat-key-row"><input type="password" id="chatKey" placeholder="sk-ant-..." autocomplete="off"><button type="button" id="chatKeySave">Salvar</button></div>
+    </div>
+    <div class="chat-log" id="chatLog" aria-live="polite"></div>
+    <form class="chat-form" id="chatForm">
+      <textarea id="chatInput" rows="1" placeholder="Escreva sua pergunta… (Enter envia, Shift+Enter quebra linha)"></textarea>
+      <button type="button" id="chatMic" class="chat-icon" aria-label="Falar" title="Falar" hidden>🎤</button>
+      <button type="submit" id="chatSend" class="chat-icon chat-send" aria-label="Enviar" title="Enviar">➤</button>
+    </form>
+  </section>
 
   <footer>
     Prazos propostos em 05/11/2026, a validar pela coordenação.<br>
@@ -1130,6 +1197,160 @@ document.addEventListener("keydown", e => {
 window.addEventListener("scroll", () => { if (curChip) showPop(curChip); }, true);
 
 render();
+/* ===================== ASSISTENTE DE CHAT ===================== */
+(function(){
+  const MODEL = "claude-sonnet-4-6";
+  const log = document.getElementById("chatLog"), input = document.getElementById("chatInput"),
+        form = document.getElementById("chatForm"), sendBtn = document.getElementById("chatSend"),
+        micBtn = document.getElementById("chatMic"), clearBtn = document.getElementById("chatClear"),
+        keyBox = document.getElementById("chatKeyBox"), keyInput = document.getElementById("chatKey"),
+        keySave = document.getElementById("chatKeySave");
+  let history = [];            /* [{role, content}] enviado inteiro a cada chamada */
+  let busy = false, sample = null, dictation = null, recog = null, listening = false;
+
+  function lsGet(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
+  function lsSet(k,v){ try { v ? localStorage.setItem(k,v) : localStorage.removeItem(k); } catch(e){} }
+
+  function renderEmpty(){ if (!log.children.length) log.innerHTML = '<p class="chat-empty">Nenhuma mensagem ainda.</p>'; }
+  function addMsg(role, text, cls){
+    const e = log.querySelector(".chat-empty"); if (e) e.remove();
+    const div = document.createElement("div");
+    div.className = "msg " + (role === "user" ? "user" : "bot") + (cls ? " " + cls : "");
+    if (role !== "user"){ const w = document.createElement("span"); w.className = "who"; w.textContent = "Assistente"; div.appendChild(w); }
+    const t = document.createElement("span"); t.className = "txt"; t.textContent = text; div.appendChild(t);
+    log.appendChild(div); log.scrollTop = log.scrollHeight;
+    return div;
+  }
+  renderEmpty();
+
+  /* contexto do painel, montado a cada pergunta com os dados atuais */
+  function contexto(){
+    const linhas = [];
+    (function walk(list){ list.forEach(n => {
+      const ids = subtreeIds(n), ms = ids.map(id => META_BY_ID[id]);
+      linhas.push(`\n## ${n.id} ${n.nome}`);
+      n.metas.forEach(id => { const m = META_BY_ID[id];
+        const mens = m.mensal ? " | meses: " + Object.entries(m.mensal).map(([k,o]) => `${+k+1}/2026 ${o.status} (prazo ${fmt(o.prazo)})`).join("; ") : "";
+        linhas.push(`- ${m.id} [${SEM_LBL[semaforo(m)]}] ${m.t} | responsável: ${m.resp.join(" e ")} | prazo: ${m.prazoTxt || fmt(m.prazo)} | situação: ${ST_LBL[m.status] || "mensal"}${mens} | entrega: ${m.entrega} | detalhe: ${m.oque}`);
+      });
+      if (n.children) walk(n.children);
+    }); })(NODES);
+    const av = [...AVANCOS].sort((a,b) => b.d.localeCompare(a.d)).slice(0, 15).map(a => `- ${fmt(a.d)}: ${a.t}`).join("\n");
+    return `Você é o assistente do Painel de Metas da Prefeitura de Valença (RJ) sobre CAUC, CRP e COMPREV. Responda em português do Brasil, com linguagem clara, executiva e concisa (no máximo 5 frases), usando apenas os dados abaixo. Se a informação não estiver nos dados, diga que não consta no painel.
+Hoje é ${HOJE.toLocaleDateString("pt-BR")}. Semáforo: cumprida (verde); urgente: vence em até 7 dias ou atrasada (vermelho); atenção: vence em 8 a 15 dias (amarelo); no prazo: mais de 15 dias (cinza).
+Responsáveis: ${Object.entries(PESSOAS).map(([k,v]) => `${k} (${v})`).join("; ")}.
+
+ESTRUTURA E METAS:${linhas.join("\n")}
+
+AVANÇOS RECENTES:
+${av}
+
+FORMATO DE SAÍDA: responda SOMENTE com um objeto JSON válido, sem texto fora dele:
+{"acao":"responder"|"filtrar","resposta":"texto para o usuário","filtro":{"entrega":"id do item, ex. 1.1, ou vazio","responsavel":"nome exato da lista de responsáveis ou vazio","semaforo":"red|amber|gray|green ou vazio","busca":"palavra-chave ou vazio"}}
+Use "filtrar" quando o usuário pedir para mostrar, listar ou filtrar metas no painel; nesse caso preencha "filtro" e explique em "resposta". Caso contrário use "responder" e omita "filtro".`;
+  }
+
+  function parseResposta(txt){
+    try { const m = txt.match(/\{[\s\S]*\}/); const o = JSON.parse(m ? m[0] : txt); if (o && o.resposta) return o; } catch(e){}
+    return {acao:"responder", resposta: txt};
+  }
+
+  function aplicarFiltro(f){
+    if (!f) return;
+    fNode.value = ALL_NODES.some(n => n.id === f.entrega) ? f.entrega : "";
+    fResp.value = Object.keys(PESSOAS).includes(f.responsavel) ? f.responsavel : "";
+    fStatus.value = ["red","amber","gray","green"].includes(f.semaforo) ? f.semaforo : "";
+    fBusca.value = f.busca || "";
+    render();
+    try { document.querySelector(".panel").scrollIntoView({behavior:"smooth", block:"start"}); } catch(e){}
+  }
+
+  async function chamarAPI(){
+    const sys = contexto();
+    if (sample){
+      const msgs = history.map((m, i) => i === 0 ? {role:m.role, content: sys + "\n\n---\nPERGUNTA:\n" + m.content} : m);
+      const r = await sample(msgs, {model: MODEL, modelTier: "default", cache: false});
+      return r.text;
+    }
+    const key = lsGet("painel_anthropic_key");
+    if (!key) throw new Error("Informe a chave da API Anthropic acima para usar o assistente.");
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {"content-type":"application/json","x-api-key":key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
+      body: JSON.stringify({model: MODEL, max_tokens: 1024, system: sys, messages: history})
+    });
+    if (!res.ok){ const t = await res.text(); throw new Error("Erro da API (" + res.status + "): " + t.slice(0, 200)); }
+    const data = await res.json();
+    return (data.content || []).filter(c => c.type === "text").map(c => c.text).join("");
+  }
+
+  async function enviar(texto){
+    texto = (texto || "").trim();
+    if (!texto || busy) return;
+    input.value = ""; autoGrow();
+    busy = true; sendBtn.disabled = true;
+    addMsg("user", texto);
+    history.push({role:"user", content:texto});
+    const pensando = addMsg("assistant", "Pensando…", "thinking");
+    try {
+      const bruto = await chamarAPI();
+      const o = parseResposta(bruto);
+      pensando.remove();
+      addMsg("assistant", o.resposta);
+      history.push({role:"assistant", content: JSON.stringify(o)});
+      if (o.acao === "filtrar"){ try { aplicarFiltro(o.filtro); } catch(e){} }
+    } catch(err){
+      pensando.remove();
+      history.pop();
+      addMsg("assistant", (err && (err.message || err.code)) || "Não foi possível obter resposta.", "err");
+    } finally {
+      busy = false; sendBtn.disabled = false; input.focus();
+    }
+  }
+
+  function autoGrow(){ input.style.height = "auto"; input.style.height = Math.min(input.scrollHeight, 140) + "px"; }
+  input.addEventListener("input", autoGrow);
+  input.addEventListener("keydown", e => { if (e.key === "Enter" && !e.shiftKey){ e.preventDefault(); enviar(input.value); } });
+  form.addEventListener("submit", e => { e.preventDefault(); enviar(input.value); });
+  clearBtn.addEventListener("click", () => { history = []; log.innerHTML = ""; renderEmpty(); input.value = ""; autoGrow(); });
+
+  keySave.addEventListener("click", () => { lsSet("painel_anthropic_key", keyInput.value.trim()); keyInput.value = ""; keyBox.hidden = !!lsGet("painel_anthropic_key"); });
+
+  /* voz: ditado do Claude quando disponível; senão, SpeechRecognition do navegador */
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  function setListening(v){ listening = v; micBtn.classList.toggle("listening", v); micBtn.setAttribute("aria-label", v ? "Parar" : "Falar"); }
+  if (SR){
+    micBtn.hidden = false;
+    recog = new SR(); recog.lang = "pt-BR"; recog.interimResults = true; recog.continuous = false;
+    let finalText = "";
+    recog.onresult = e => { let parcial = ""; for (let i = e.resultIndex; i < e.results.length; i++){ const r = e.results[i]; if (r.isFinal) finalText += r[0].transcript; else parcial += r[0].transcript; } input.value = finalText + parcial; autoGrow(); };
+    recog.onend = () => { setListening(false); const t = finalText.trim(); finalText = ""; if (t) enviar(t); };
+    recog.onerror = () => { setListening(false); };
+    micBtn.addEventListener("click", () => {
+      if (dictation) return;
+      if (listening){ recog.stop(); return; }
+      finalText = ""; input.value = ""; setListening(true);
+      try { recog.start(); } catch(e){ setListening(false); }
+    });
+  }
+
+  /* recursos do Claude (somente no link do Claude) */
+  if (window.claude && typeof window.claude.use === "function"){
+    window.claude.use("sample").then(s => { sample = s; keyBox.hidden = !!s || !!lsGet("painel_anthropic_key"); }).catch(() => {});
+    window.claude.use("dictation").then(d => {
+      if (!d) return;
+      dictation = d; micBtn.hidden = false;
+      let acum = "";
+      d.onPartial(({text}) => { input.value = acum + text; autoGrow(); });
+      d.onFinal(({text}) => { acum += text + " "; input.value = acum; autoGrow(); });
+      d.onState(({state}) => { const on = state === "listening"; setListening(on); if (!on){ const t = acum.trim(); acum = ""; if (t) enviar(t); } });
+      micBtn.addEventListener("click", () => { if (listening){ d.stop().catch(() => {}); } else { acum = ""; input.value = ""; d.start().catch(() => setListening(false)); } });
+    }).catch(() => {});
+    setTimeout(() => { if (!sample) keyBox.hidden = !!lsGet("painel_anthropic_key"); }, 11000);
+  } else {
+    keyBox.hidden = !!lsGet("painel_anthropic_key");
+  }
+})();
 
 </script>
 </body>
