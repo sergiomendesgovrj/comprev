@@ -695,7 +695,9 @@
             <tr class="tot"><td>Total</td><td class="n">R$ 25.530.499,47</td></tr>
           </tbody></table>
           <p><span class="lbl">Composição esclarecida em 09/11/2026</span>Segundo o PREVI, os requerimentos em que Valença é regime instituidor dividem-se em: <b>279</b> aguardando análise do INSS, sem pendência do Município, que devem gerar cerca de R$ 25 milhões; <b>77</b> aguardando análise médica, por serem aposentadorias por invalidez, que dependem da nomeação e do cadastro de um médico perito no COMPREV e, depois de analisados, aumentam aquele valor; e <b>221</b> em compensação, já deferidos, que geram um fluxo mensal de cerca de R$ 121 mil, creditado todo dia 5. Desse último grupo, R$ 1.038.959,31 foram desbloqueados, com entrada prevista para 09/11, e R$ 574.977,21 são esperados em dezembro, totalizando R$ 1.613.936,52, valor adicional ao fluxo mensal. Há ainda <b>10</b> requerimentos em que Valença é regime de origem, isto é, pessoas que levaram tempo do regime próprio e se aposentaram pelo INSS: cabe ao PREVI analisá-los, e os valores devidos ao INSS são abatidos dos repasses. Existem também requerimentos com exigência, distintos dos 279.</p>
-          <p><span class="lbl">Questões em aberto</span>O prazo de análise dos 279 requerimentos pelo INSS, a nomeação do perito e o levantamento das exigências.</p>
+          <p><span class="lbl">Situação das exigências (10/11/2026)</span>As exigências pendentes foram atendidas pelo PREVI. O sistema não aponta requerimento com risco de prazo, prescrição ou indeferimento.</p>
+          <p><span class="lbl">Histórico de recebimentos</span>Ao longo dos anos, o PREVI recebeu do COMPREV valores que, aplicados na Caixa Econômica Federal, somam hoje R$ 28.744.560,45, entre principal e rendimentos. Esses recursos pertencem ao regime próprio e destinam-se exclusivamente ao pagamento de benefícios.</p>
+          <p><span class="lbl">Questões em aberto</span>O prazo de análise dos 279 requerimentos pelo INSS, a designação do médico perito e a análise dos 10 requerimentos em que Valença é regime de origem.</p>
           <p><span class="lbl">Vinculação dos recursos</span>Os valores da compensação destinam-se exclusivamente ao pagamento de benefícios previdenciários. Não custeiam outras despesas, mas reduzem a complementação do PREVI pelo Tesouro municipal.</p>
           <p><span class="lbl">Riscos</span>Indeferimento de requerimentos sem resposta; tratamento como receita certa de valores que podem ser pagos ao longo de anos; e concentração da operação dos sistemas em uma única pessoa.</p>
           <p><span class="lbl">Objetivo estrutural</span>Instituir rotina permanente de recuperação, com equipe designada, procedimento escrito e relatório mensal, para que os créditos deixem de se acumular e se convertam em fluxo regular.</p>
@@ -788,22 +790,22 @@ const METAS = [
    oque:"São 279 requerimentos enviados por Valença, sem pendência do PREVI, aguardando análise do INSS. Juntos, devem gerar cerca de R$ 25 milhões. Seria importante uma ação presencial em Brasília, com documentos fornecidos pelo PREVI.",
    porque:"É o grosso dos R$ 25 milhões. O PREVI já fez a sua parte; agora depende do INSS.",
    risco:"Sem cobrança, a análise pode se arrastar e o dinheiro não entra."},
-  {id:"C7", f:"C", t:"Nomear médico perito e cadastrá-lo no COMPREV", resp:["Juarez"], prazo:"2026-11-27", status:"aberta",
-   entrega:"Perito nomeado e cadastrado no sistema COMPREV",
-   oque:"Os 77 requerimentos são de aposentadoria por invalidez e exigem análise médica. Para isso, o Município precisa nomear um médico perito e cadastrá-lo no COMPREV, para que ele acesse o sistema e dê o parecer.",
+  {id:"C7", f:"C", t:"Nomear médico perito e cadastrá-lo no COMPREV", resp:["Denise"], prazo:"2026-11-27", status:"andamento",
+   entrega:"Médico designado pela Prefeitura e cadastrado no sistema COMPREV",
+   oque:"Os 77 requerimentos são de aposentadoria por invalidez e exigem manifestação médica. A Prefeitura deve disponibilizar um médico, de preferência do trabalho, ou contratar um profissional apenas para essa tarefa, e cadastrá-lo no COMPREV com usuário próprio. A pedido do Deputado André Corrêa, a Secretaria de Fazenda está ajustando a designação com o Prefeito.",
    porque:"Sem o perito, os 77 requerimentos não avançam.",
    risco:"Os requerimentos ficam parados indefinidamente."},
   {id:"C8", f:"C", t:"Concluir a análise médica dos 77 requerimentos", resp:["Juarez"], prazo:"2026-12-18", status:"aberta",
    entrega:"77 requerimentos com parecer médico, movidos para aguardando análise do INSS",
-   oque:"Com o parecer do perito, os requerimentos passam para aguardando análise e somam-se aos 279.",
+   oque:"Em cada requerimento, o médico responde a duas perguntas: se houve acidente de trabalho e se a aposentadoria foi integral. Feito isso, os requerimentos passam para aguardando análise e somam-se aos 279. O local no sistema onde o médico responde será esclarecido na sala virtual com o COMPREV de 11/11.",
    porque:"Aumenta o valor a recuperar, hoje estimado em cerca de R$ 25 milhões.",
    risco:"Créditos que deixam de ser requeridos."},
-  {id:"C2", f:"C", t:"Levantar os requerimentos com exigência", resp:["Juarez"], prazo:"2026-11-10", status:"andamento",
+  {id:"C2", f:"C", t:"Levantar os requerimentos com exigência", resp:["Juarez"], prazo:"2026-11-10", status:"concluida",
    entrega:"Relatório com as exigências existentes, o motivo e o tipo de benefício",
    oque:"Verificar no sistema COMPREV se há requerimentos devolvidos pelo INSS com exigência, fora dos 279, e quais são.",
    porque:"Existem requerimentos com pendências, distintos dos que compõem os R$ 25 milhões.",
    risco:"Exigências sem resposta podem levar ao indeferimento."},
-  {id:"C4", f:"C", t:"Responder as exigências identificadas", resp:["Juarez"], prazo:"2026-12-18", status:"aberta",
+  {id:"C4", f:"C", t:"Responder as exigências identificadas", resp:["Juarez"], prazo:"2026-12-18", status:"concluida",
    entrega:"Exigências respondidas no sistema COMPREV",
    oque:"Corrigir ou complementar os requerimentos apontados no levantamento da meta C2.",
    porque:"Cada exigência respondida volta à fila de análise e pode gerar novos créditos.",
@@ -886,6 +888,10 @@ const METAS = [
 ];
 
 const AVANCOS = [
+  {d:"2026-11-10", t:"O Juarez antecipou de 14/12 para 11/11, às 9h30, a sala virtual com o COMPREV, para esclarecer onde o médico perito registra as respostas no sistema, entre outros assuntos.", m:["C7","C8"]},
+  {d:"2026-11-10", t:"O Edmilson detalhou o procedimento da invalidez: a Prefeitura disponibiliza um médico, de preferência do trabalho, ou contrata um só para a tarefa; o médico é cadastrado no COMPREV e responde, em cada requerimento, se houve acidente de trabalho e se a aposentadoria foi integral. O Deputado André Corrêa pediu à Denise que ajuste a designação com o Prefeito.", m:["C7","C8"]},
+  {d:"2026-11-10", t:"O PREVI atendeu as exigências pendentes, conforme confirmado pelo Edmilson. O sistema não aponta requerimento com risco de prazo, prescrição ou indeferimento.", m:["C2","C4"]},
+  {d:"2026-11-10", t:"O Juarez informou que os valores já recebidos do COMPREV ao longo dos anos, aplicados na Caixa, somam R$ 28.744.560,45 entre principal e rendimentos.", m:[]},
   {d:"2026-11-10", t:"O Juarez informou que encaminhará hoje ao Governo o Projeto de Lei Complementar que altera a LC nº 236/2021, para envio à Câmara. Compartilhou também a relação dos 35 municípios fluminenses conveniados à RJPrev, entre eles Vassouras, Barra do Piraí, Paraíba do Sul e Volta Redonda.", m:["R4"]},
   {d:"2026-11-09", t:"Previdência complementar: o PREVI abriu o processo, a PGM emitiu parecer e a Procuradoria elaborou o Projeto de Lei Complementar que altera o art. 20 da LC nº 236/2021 para permitir a adesão direta à RJPrev. A minuta foi encaminhada ao Juarez para envio à Câmara.", m:["R4"]},
   {d:"2026-11-09", t:"A frente do CADIN passou a ser conduzida por Luiz Arthur.", m:["D1","D2"]},
