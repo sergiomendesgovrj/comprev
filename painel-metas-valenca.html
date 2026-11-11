@@ -417,6 +417,7 @@
     --c-user:#1d3a5c; --c-user-text:#e3eefb; --c-bot:#223035; --c-bot-text:#e3ecee; --c-label:#8fc3ff;
     --c-input:#0f1719; --c-accent:#6fa8ff; color-scheme:dark;
   }
+  .chat-wrap[hidden]{display:none !important;}
   .chat-wrap, .chat-wrap *{min-width:0;}
   .chat-wrap{max-width:100%;overflow:hidden;}
   .chat-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;}
@@ -801,16 +802,12 @@
   </div>
 
   <!-- ================= ASSISTENTE ================= -->
-  <section class="chat-wrap" id="chatSection" aria-labelledby="chatTitle">
+  <section class="chat-wrap" id="chatSection" aria-labelledby="chatTitle" hidden>
     <div class="chat-head">
       <h2 id="chatTitle">ASSISTENTE</h2>
-      <span class="chat-actions"><button type="button" id="chatKeyChange" class="chat-link" hidden>Trocar chave</button><button type="button" id="chatClear" class="chat-link">Limpar conversa</button></span>
+      <span class="chat-actions"><button type="button" id="chatClear" class="chat-link">Limpar conversa</button></span>
     </div>
     <p class="chat-sub">Pergunte sobre as metas, os prazos ou a situação de cada item. Ex.: "o que está atrasado?" ou "mostre as metas do Juarez".</p>
-    <div class="chat-key" id="chatKeyBox" hidden>
-      <label for="chatKey">Chave da API Anthropic, criada em console.anthropic.com → API Keys (começa com sk-ant-api). Fica salva só neste navegador.</label>
-      <div class="chat-key-row"><input type="password" id="chatKey" placeholder="sk-ant-..." autocomplete="off"><button type="button" id="chatKeySave">Salvar</button></div>
-    </div>
     <div class="chat-log" id="chatLog" aria-live="polite"></div>
     <form class="chat-form" id="chatForm">
       <textarea id="chatInput" rows="1" placeholder="Escreva sua pergunta… (Enter envia, Shift+Enter quebra linha)"></textarea>
@@ -1209,9 +1206,7 @@ render();
   const log = document.getElementById("chatLog"), input = document.getElementById("chatInput"),
         form = document.getElementById("chatForm"), sendBtn = document.getElementById("chatSend"),
         micBtn = document.getElementById("chatMic"), clearBtn = document.getElementById("chatClear"),
-        keyBox = document.getElementById("chatKeyBox"), keyInput = document.getElementById("chatKey"),
-        keySave = document.getElementById("chatKeySave"), keyChange = document.getElementById("chatKeyChange");
-  function showKeyBox(show){ keyBox.hidden = !show; keyChange.hidden = show || !!sample || !lsGet("painel_anthropic_key"); if (show) keyInput.focus(); }
+        section = document.getElementById("chatSection");
   let history = [];            /* [{role, content}] enviado inteiro a cada chamada */
   let busy = false, sample = null, dictation = null, recog = null, listening = false;
 
@@ -1279,21 +1274,7 @@ Use "filtrar" quando o usuário pedir para mostrar, listar ou filtrar metas no p
       const r = await sample(msgs, {model: MODEL, modelTier: "default", cache: false});
       return r.text;
     }
-    const key = lsGet("painel_anthropic_key");
-    if (!key) throw new Error("Informe a chave da API Anthropic acima para usar o assistente.");
-    const res = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: {"content-type":"application/json","x-api-key":key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
-      body: JSON.stringify({model: MODEL, max_tokens: 1024, system: sys, messages: history})
-    });
-    if (!res.ok){
-      if (res.status === 401){ lsSet("painel_anthropic_key", ""); showKeyBox(true); throw new Error("A chave da API não foi aceita. Confira se ela começa com sk-ant-api e foi copiada inteira, sem espaços, e salve novamente acima."); }
-      if (res.status === 429) throw new Error("Limite de uso da API atingido. Aguarde um pouco e tente de novo.");
-      if (res.status === 400 && /credit/i.test(await res.clone().text())) throw new Error("A conta da API está sem créditos. Adicione créditos em console.anthropic.com.");
-      const t = await res.text(); throw new Error("Erro da API (" + res.status + "): " + t.slice(0, 200));
-    }
-    const data = await res.json();
-    return (data.content || []).filter(c => c.type === "text").map(c => c.text).join("");
+    throw new Error("O assistente não está disponível neste endereço.");
   }
 
   async function enviar(texto){
@@ -1326,8 +1307,6 @@ Use "filtrar" quando o usuário pedir para mostrar, listar ou filtrar metas no p
   form.addEventListener("submit", e => { e.preventDefault(); enviar(input.value); });
   clearBtn.addEventListener("click", () => { history = []; log.innerHTML = ""; renderEmpty(); input.value = ""; autoGrow(); });
 
-  keySave.addEventListener("click", () => { const k = keyInput.value.replace(/\s+/g, ""); if (!k) return; lsSet("painel_anthropic_key", k); keyInput.value = ""; showKeyBox(false); });
-  keyChange.addEventListener("click", () => showKeyBox(true));
 
   /* voz: ditado do Claude quando disponível; senão, SpeechRecognition do navegador */
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -1349,7 +1328,7 @@ Use "filtrar" quando o usuário pedir para mostrar, listar ou filtrar metas no p
 
   /* recursos do Claude (somente no link do Claude) */
   if (window.claude && typeof window.claude.use === "function"){
-    window.claude.use("sample").then(s => { sample = s; showKeyBox(!s && !lsGet("painel_anthropic_key")); }).catch(() => {});
+    window.claude.use("sample").then(s => { sample = s; if (s) section.hidden = false; }).catch(() => {});
     window.claude.use("dictation").then(d => {
       if (!d) return;
       dictation = d; micBtn.hidden = false;
@@ -1359,9 +1338,6 @@ Use "filtrar" quando o usuário pedir para mostrar, listar ou filtrar metas no p
       d.onState(({state}) => { const on = state === "listening"; setListening(on); if (!on){ const t = acum.trim(); acum = ""; if (t) enviar(t); } });
       micBtn.addEventListener("click", () => { if (listening){ d.stop().catch(() => {}); } else { acum = ""; input.value = ""; d.start().catch(() => setListening(false)); } });
     }).catch(() => {});
-    setTimeout(() => { if (!sample) showKeyBox(!lsGet("painel_anthropic_key")); }, 11000);
-  } else {
-    showKeyBox(!lsGet("painel_anthropic_key"));
   }
 })();
 
