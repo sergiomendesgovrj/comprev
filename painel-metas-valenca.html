@@ -418,6 +418,9 @@
     --c-input:#0f1719; --c-accent:#6fa8ff; color-scheme:dark;
   }
   .chat-wrap[hidden]{display:none !important;}
+  .assist-panel{background:transparent !important;border:none !important;box-shadow:none !important;margin-top:0 !important;}
+  .assist-panel .chat-wrap{margin-top:10px;}
+  .chat-title-sm{font-size:12px;font-weight:700;color:var(--c-muted);text-transform:uppercase;letter-spacing:.5px;}
   .chat-open{align-self:flex-start;display:inline-flex;align-items:center;gap:8px;background:var(--c-accent);color:#fff;text-decoration:none;font-weight:700;font-size:14px;padding:11px 18px;border-radius:12px;}
   .chat-open:hover{filter:brightness(1.08);}
   .chat-wrap, .chat-wrap *{min-width:0;}
@@ -803,9 +806,12 @@
     </div>
   </div>
 
-  <!-- ================= ASSISTENTE (fora do Claude) ================= -->
+  <!-- ================= ASSISTENTE (seção recolhível) ================= -->
+  <div class="stats-section" id="sec-assistente">
+    <button type="button" class="stats-toggle" aria-expanded="false"><span class="stats-toggle-icon">+</span>ASSISTENTE</button>
+    <div class="stats-panel assist-panel">
+
   <section class="chat-wrap chat-out" id="chatOut">
-    <div class="chat-head"><h2>ASSISTENTE</h2></div>
     <p class="chat-sub">Converse com o assistente sobre as metas, os prazos e a situação de cada item. Ele funciona na versão do painel dentro do Claude.</p>
     <a class="chat-open" href="https://claude.ai/artifact/4iYey396cKoP1HQL4JqnyQ" target="_blank" rel="noopener">Abrir assistente no Claude ↗</a>
   </section>
@@ -813,7 +819,7 @@
   <!-- ================= ASSISTENTE ================= -->
   <section class="chat-wrap" id="chatSection" aria-labelledby="chatTitle" hidden>
     <div class="chat-head">
-      <h2 id="chatTitle">ASSISTENTE</h2>
+      <span id="chatTitle" class="chat-title-sm">Conversa</span>
       <span class="chat-actions"><button type="button" id="chatClear" class="chat-link">Limpar conversa</button></span>
     </div>
     <p class="chat-sub">Pergunte sobre as metas, os prazos ou a situação de cada item. Ex.: "o que está atrasado?" ou "mostre as metas do Juarez".</p>
@@ -824,6 +830,8 @@
       <button type="submit" id="chatSend" class="chat-icon chat-send" aria-label="Enviar" title="Enviar">➤</button>
     </form>
   </section>
+    </div>
+  </div>
 
   <footer>
     Prazos propostos em 05/11/2026, a validar pela coordenação.<br>
