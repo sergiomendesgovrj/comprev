@@ -1254,15 +1254,20 @@ render();
       });
       if (n.children) walk(n.children);
     }); })(NODES);
-    const av = [...AVANCOS].sort((a,b) => b.d.localeCompare(a.d)).slice(0, 15).map(a => `- ${fmt(a.d)}: ${a.t}`).join("\n");
-    return `Você é o assistente do Painel de Metas da Prefeitura de Valença (RJ) sobre CAUC, CRP e COMPREV. Responda em português do Brasil, com linguagem clara, executiva e concisa (no máximo 5 frases), usando apenas os dados abaixo. Se a informação não estiver nos dados, diga que não consta no painel.
+    const av = [...AVANCOS].sort((a,b) => b.d.localeCompare(a.d)).map(a => `- ${fmt(a.d)}: ${a.t}`).join("\n");
+    const compEl = document.querySelector("#sec-compilado .sp-body");
+    const compilado = compEl ? compEl.textContent.replace(/[ \t]+/g, " ").replace(/\n\s*\n+/g, "\n").trim() : "";
+    return `Você é o assistente do Painel de Metas da Prefeitura de Valença (RJ) sobre CAUC, CRP e COMPREV. Responda em português do Brasil, com linguagem clara, executiva e concisa (no máximo 5 frases), usando SOMENTE as informações abaixo (metas, avanços e o Compilado da Situação). Não use conhecimento externo, nem para conceitos gerais. Se a pergunta tratar de algo que não está nessas informações, responda com cordialidade que esse assunto não consta no painel, que aqui são tratadas apenas as informações do painel e que a pessoa deve procurar outra fonte. Nunca invente números, datas ou fatos.
 Hoje é ${HOJE.toLocaleDateString("pt-BR")}. Semáforo: cumprida (verde); urgente: vence em até 7 dias ou atrasada (vermelho); atenção: vence em 8 a 15 dias (amarelo); no prazo: mais de 15 dias (cinza).
 Responsáveis: ${Object.entries(PESSOAS).map(([k,v]) => `${k} (${v})`).join("; ")}.
 
 ESTRUTURA E METAS:${linhas.join("\n")}
 
-AVANÇOS RECENTES:
+AVANÇOS REGISTRADOS:
 ${av}
+
+COMPILADO DA SITUAÇÃO (texto explicativo do painel):
+${compilado}
 
 FORMATO DE SAÍDA: responda SOMENTE com um objeto JSON válido, sem texto fora dele:
 {"acao":"responder"|"filtrar","resposta":"texto para o usuário","filtro":{"entrega":"id do item, ex. 1.1, ou vazio","responsavel":"nome exato da lista de responsáveis ou vazio","semaforo":"red|amber|gray|green ou vazio","busca":"palavra-chave ou vazio"}}
