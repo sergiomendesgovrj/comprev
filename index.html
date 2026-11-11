@@ -418,6 +418,8 @@
     --c-input:#0f1719; --c-accent:#6fa8ff; color-scheme:dark;
   }
   .chat-wrap[hidden]{display:none !important;}
+  .chat-open{align-self:flex-start;display:inline-flex;align-items:center;gap:8px;background:var(--c-accent);color:#fff;text-decoration:none;font-weight:700;font-size:14px;padding:11px 18px;border-radius:12px;}
+  .chat-open:hover{filter:brightness(1.08);}
   .chat-wrap, .chat-wrap *{min-width:0;}
   .chat-wrap{max-width:100%;overflow:hidden;}
   .chat-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;}
@@ -800,6 +802,13 @@
       </div>
     </div>
   </div>
+
+  <!-- ================= ASSISTENTE (fora do Claude) ================= -->
+  <section class="chat-wrap chat-out" id="chatOut">
+    <div class="chat-head"><h2>ASSISTENTE</h2></div>
+    <p class="chat-sub">Converse com o assistente sobre as metas, os prazos e a situação de cada item. Ele funciona na versão do painel dentro do Claude.</p>
+    <a class="chat-open" href="https://claude.ai/artifact/4iYey396cKoP1HQL4JqnyQ" target="_blank" rel="noopener">Abrir assistente no Claude ↗</a>
+  </section>
 
   <!-- ================= ASSISTENTE ================= -->
   <section class="chat-wrap" id="chatSection" aria-labelledby="chatTitle" hidden>
@@ -1328,7 +1337,7 @@ Use "filtrar" quando o usuário pedir para mostrar, listar ou filtrar metas no p
 
   /* recursos do Claude (somente no link do Claude) */
   if (window.claude && typeof window.claude.use === "function"){
-    window.claude.use("sample").then(s => { sample = s; if (s) section.hidden = false; }).catch(() => {});
+    window.claude.use("sample").then(s => { sample = s; if (s){ section.hidden = false; const o = document.getElementById("chatOut"); if (o) o.hidden = true; } }).catch(() => {});
     window.claude.use("dictation").then(d => {
       if (!d) return;
       dictation = d; micBtn.hidden = false;
