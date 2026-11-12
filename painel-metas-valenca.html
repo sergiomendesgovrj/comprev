@@ -879,12 +879,12 @@ const METAS = [
    risco:"Sem cobrança, a análise pode se arrastar e o dinheiro não entra."},
   {id:"C7", f:"C", t:"Nomear médico perito e cadastrá-lo no COMPREV", resp:["Juarez"], prazo:"2026-11-27", status:"andamento",
    entrega:"Dr. Saulo, médico da Prefeitura, cadastrado no COMPREV e com os processos encaminhados para avaliação",
-   oque:"Os 77 requerimentos são de aposentadoria por invalidez e exigem manifestação médica. A Prefeitura deve disponibilizar um médico, de preferência do trabalho, ou contratar um profissional apenas para essa tarefa, e cadastrá-lo no COMPREV com usuário próprio. A pedido do Deputado André Corrêa, a Secretaria de Fazenda articulou a designação do Dr. Saulo, médico da Prefeitura. Falta o PREVI confirmar o cadastro dele no COMPREV e encaminhar-lhe os processos.",
+   oque:"Os 77 requerimentos são de aposentadoria por invalidez e exigem manifestação médica. A Prefeitura deve disponibilizar um médico, de preferência do trabalho, ou contratar um profissional apenas para essa tarefa, e cadastrá-lo no COMPREV com usuário próprio. A pedido do Deputado André Corrêa, a Secretaria de Fazenda articulou a designação do Dr. Saulo, médico da Prefeitura. O PREVI já enviou o formulário de cadastro dele ao COMPREV e aguarda a validação do acesso.",
    porque:"Sem o perito, os 77 requerimentos não avançam.",
    risco:"Os requerimentos ficam parados indefinidamente."},
-  {id:"C8", f:"C", t:"Concluir a análise médica dos 77 requerimentos", resp:["Juarez"], prazo:"2026-12-18", status:"aberta",
-   entrega:"77 requerimentos com parecer médico, movidos para aguardando análise do INSS",
-   oque:"Em cada requerimento, o médico responde a duas perguntas: se houve acidente de trabalho e se a aposentadoria foi integral. Feito isso, os requerimentos passam para aguardando análise e somam-se aos 279. O local no sistema onde o médico responde será esclarecido na sala virtual com o COMPREV de 11/11.",
+  {id:"C8", f:"C", t:"Concluir a análise médica dos requerimentos de invalidez", resp:["Juarez"], prazo:"2026-11-27", status:"andamento",
+   entrega:"Requerimentos com parecer médico, movidos para aguardando análise do INSS",
+   oque:"Em cada requerimento, o médico responde a duas perguntas: se houve acidente de trabalho e se a aposentadoria foi integral. Como os processos são antigos e físicos, cada um será conferido antes do envio, em mutirão no PREVI com o Juarez, o Dr. Saulo e a Jociane. O PREVI classificou 78 processos: 29 de invalidez permanente integral, 30 de invalidez permanente proporcional, 14 de incapacidade permanente para o trabalho e 5 de aposentadoria judicial de pessoa com deficiência (o COMPREV indicava 77; diferença a confirmar). Concluída a análise, os requerimentos passam para aguardando análise e somam-se aos 279. Pela estimativa da Secretaria de Fazenda, a pendência se resolve em cerca de cinco dias após a validação do cadastro do médico.",
    porque:"Aumenta o valor a recuperar, hoje estimado em cerca de R$ 25 milhões.",
    risco:"Créditos que deixam de ser requeridos."},
   {id:"C2", f:"C", t:"Levantar os requerimentos com exigência", resp:["Juarez"], prazo:"2026-11-10", status:"concluida",
@@ -975,6 +975,7 @@ const METAS = [
 ];
 
 const AVANCOS = [
+  {d:"2026-11-12", t:"Invalidez: o PREVI enviou ao COMPREV o formulário de cadastro do Dr. Saulo e aguarda a validação do acesso. Os processos, antigos e físicos, serão conferidos em mutirão no PREVI (Juarez, Dr. Saulo e Jociane). O PREVI classificou 78 processos: 29 integrais, 30 proporcionais, 14 por incapacidade permanente e 5 judiciais de pessoa com deficiência. A Secretaria de Fazenda estima concluir em cinco dias após a validação.", m:["C7","C8"]},
   {d:"2026-11-12", t:"O médico indicado para avaliar os requerimentos de invalidez é o Dr. Saulo, da Prefeitura. A Denise perguntou ao Juarez se ele já foi cadastrado no COMPREV e pediu que os processos lhe sejam encaminhados para avaliação.", m:["C7","C8"]},
   {d:"2026-11-10", t:"O Juarez antecipou de 14/12 para 11/11, às 9h30, a sala virtual com o COMPREV, para esclarecer onde o médico perito registra as respostas no sistema, entre outros assuntos.", m:["C7","C8"]},
   {d:"2026-11-10", t:"O Edmilson detalhou o procedimento da invalidez: a Prefeitura disponibiliza um médico, de preferência do trabalho, ou contrata um só para a tarefa; o médico é cadastrado no COMPREV e responde, em cada requerimento, se houve acidente de trabalho e se a aposentadoria foi integral. O Deputado André Corrêa pediu à Denise que ajuste a designação com o Dr. Saulo, médico da Prefeitura.", m:["C7","C8"]},
