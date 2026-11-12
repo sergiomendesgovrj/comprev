@@ -841,7 +841,7 @@
 
 <script>
 /* ===================== DADOS (editar aqui a cada atualização) ===================== */
-const ATUALIZADO = "10/11/2026";
+const ATUALIZADO = "12/11/2026";
 
 const PESSOAS = {
   "Denise":       "Secretária de Fazenda · coordenação geral",
@@ -877,9 +877,9 @@ const METAS = [
    oque:"São 279 requerimentos enviados por Valença, sem pendência do PREVI, aguardando análise do INSS. Juntos, devem gerar cerca de R$ 25 milhões. Seria importante uma ação presencial em Brasília, com documentos fornecidos pelo PREVI.",
    porque:"É o grosso dos R$ 25 milhões. O PREVI já fez a sua parte; agora depende do INSS.",
    risco:"Sem cobrança, a análise pode se arrastar e o dinheiro não entra."},
-  {id:"C7", f:"C", t:"Nomear médico perito e cadastrá-lo no COMPREV", resp:["Denise"], prazo:"2026-11-27", status:"andamento",
-   entrega:"Médico designado pela Prefeitura e cadastrado no sistema COMPREV",
-   oque:"Os 77 requerimentos são de aposentadoria por invalidez e exigem manifestação médica. A Prefeitura deve disponibilizar um médico, de preferência do trabalho, ou contratar um profissional apenas para essa tarefa, e cadastrá-lo no COMPREV com usuário próprio. A pedido do Deputado André Corrêa, a Secretaria de Fazenda está ajustando a designação com o Prefeito.",
+  {id:"C7", f:"C", t:"Nomear médico perito e cadastrá-lo no COMPREV", resp:["Juarez"], prazo:"2026-11-27", status:"andamento",
+   entrega:"Dr. Saulo, médico da Prefeitura, cadastrado no COMPREV e com os processos encaminhados para avaliação",
+   oque:"Os 77 requerimentos são de aposentadoria por invalidez e exigem manifestação médica. A Prefeitura deve disponibilizar um médico, de preferência do trabalho, ou contratar um profissional apenas para essa tarefa, e cadastrá-lo no COMPREV com usuário próprio. A pedido do Deputado André Corrêa, a Secretaria de Fazenda articulou a designação do Dr. Saulo, médico da Prefeitura. Falta o PREVI confirmar o cadastro dele no COMPREV e encaminhar-lhe os processos.",
    porque:"Sem o perito, os 77 requerimentos não avançam.",
    risco:"Os requerimentos ficam parados indefinidamente."},
   {id:"C8", f:"C", t:"Concluir a análise médica dos 77 requerimentos", resp:["Juarez"], prazo:"2026-12-18", status:"aberta",
@@ -975,8 +975,9 @@ const METAS = [
 ];
 
 const AVANCOS = [
+  {d:"2026-11-12", t:"O médico indicado para avaliar os requerimentos de invalidez é o Dr. Saulo, da Prefeitura. A Denise perguntou ao Juarez se ele já foi cadastrado no COMPREV e pediu que os processos lhe sejam encaminhados para avaliação.", m:["C7","C8"]},
   {d:"2026-11-10", t:"O Juarez antecipou de 14/12 para 11/11, às 9h30, a sala virtual com o COMPREV, para esclarecer onde o médico perito registra as respostas no sistema, entre outros assuntos.", m:["C7","C8"]},
-  {d:"2026-11-10", t:"O Edmilson detalhou o procedimento da invalidez: a Prefeitura disponibiliza um médico, de preferência do trabalho, ou contrata um só para a tarefa; o médico é cadastrado no COMPREV e responde, em cada requerimento, se houve acidente de trabalho e se a aposentadoria foi integral. O Deputado André Corrêa pediu à Denise que ajuste a designação com o Prefeito.", m:["C7","C8"]},
+  {d:"2026-11-10", t:"O Edmilson detalhou o procedimento da invalidez: a Prefeitura disponibiliza um médico, de preferência do trabalho, ou contrata um só para a tarefa; o médico é cadastrado no COMPREV e responde, em cada requerimento, se houve acidente de trabalho e se a aposentadoria foi integral. O Deputado André Corrêa pediu à Denise que ajuste a designação com o Dr. Saulo, médico da Prefeitura.", m:["C7","C8"]},
   {d:"2026-11-10", t:"O PREVI atendeu as exigências pendentes, conforme confirmado pelo Edmilson. O sistema não aponta requerimento com risco de prazo, prescrição ou indeferimento.", m:["C2","C4"]},
   {d:"2026-11-10", t:"O Juarez informou que os valores já recebidos do COMPREV ao longo dos anos, aplicados na Caixa, somam R$ 28.744.560,45 entre principal e rendimentos.", m:[]},
   {d:"2026-11-10", t:"O Juarez informou que encaminhará hoje ao Governo o Projeto de Lei Complementar que altera a LC nº 236/2021, para envio à Câmara. Compartilhou também a relação dos 35 municípios fluminenses conveniados à RJPrev, entre eles Vassouras, Barra do Piraí, Paraíba do Sul e Volta Redonda.", m:["R4"]},
